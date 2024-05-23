@@ -1,0 +1,35 @@
+.root {
+    -fx-background-color: linear-gradient(to top, #0a0a0a, #262525);
+    -fx-font-family: "JetBrains Mono";
+}
+#leftHeader {
+    -fx-text-fill: #ffff;
+    -fx-font-size: 1.5em; /* Use em for relative size */
+    -fx-translate-x: 1em; /* Use em for relative size */
+    -fx-translate-y: 1.5em;
+}
+#rightBar {
+    -fx-background-color: #070707;
+}
+#leftBar {
+    -fx-background-color: #101010;
+}
+#button1, #button2, #button3, #button4 {
+    -fx-text-fill: white;
+    -fx-font-size: 1.2em; /* Use em for relative size */
+    -fx-font-weight: bold;
+    -fx-min-height: 2em; /* Use em for relative size */
+    -fx-min-width: 15em; /* Use percentage for relative size */
+    -fx-background-color: #252728;
+    -fx-background-radius: 0.5em; /* Use em for relative size */
+    -fx-alignment: baseline-left;
+    -fx-graphic-text-gap: 0.5em; /* Use em for relative size */
+}
+#button1:hover, #button2:hover, #button3:hover, #button4:hover {
+    -fx-background-color: derive(#252728, 25%);
+    -fx-background-radius: 0.5em;
+    -fx-cursor: hand;
+}
+#button1:pressed, #button2:pressed, #button3:pressed, #button4:pressed {
+    -fx-background-color: #252728;
+}

@@ -1,0 +1,102 @@
+#headerLabel {
+    -fx-text-fill: WHITE;
+    -fx-font-size: 2em; /* Use em for relative size */
+    -fx-translate-y: 0.5em;
+    -fx-translate-x: 1em;
+}
+#headerText {
+    -fx-fill: #9f9e9e;
+    -fx-font-size: 1.5em; /* Use em for relative size */
+    -fx-translate-y: 0.5em;
+    -fx-translate-x: 1em;
+}
+#notificationButton {
+    -fx-background-color: #252728;
+    -fx-background-radius: 1em; /* Use em for relative size */
+    -fx-translate-x: 1em;
+    -fx-translate-y: 1em;
+}
+#monthMenuButton {
+    -fx-background-color: #252728;
+}
+.menu-button {
+    -fx-base: #252728;
+    -fx-background-color: #252728;
+}
+.menu-button:hover {
+    -fx-background-color: derive(#252728, 20%);
+}
+.menu-item:hover {
+    -fx-background-color: derive(#252728, 20%);
+}
+#moneyOverview {
+    -fx-translate-y: 4em;
+    -fx-background-radius: 1em; /* Use em for relative size */
+}
+#text1, #text2, #text3, #text4, #text5 {
+    -fx-fill: #029d76;
+    -fx-font-size: 1.3em; /* Use em for relative size */
+    -fx-translate-y: 1em;
+    -fx-translate-x: 1em;
+}
+#balance, #income, #expense, #budget, #savings {
+    -fx-fill:#00f8da;
+    -fx-font-size: 1.8em; /* Use em for relative size */
+    -fx-translate-x: 0.7em;
+    -fx-translate-y: 1em;
+}
+#balanceBox, #incomeBox, #expenseBox, #budgetBox, #savingsBox {
+    -fx-background-color: #021c18;
+    -fx-background-radius: 1.5em;
+    -fx-border-color: #000000;
+    -fx-border-radius: 1em;
+    -fx-max-height: 1.3em;
+    -fx-min-width: 2em;
+}
+#balanceChart,#expenseChart,#incomeChart,#budgetChart,#savingsChart{
+    -fx-max-width: Infinity;
+    -fx-max-height: Infinity;
+}
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+.chart-title {
+    -fx-text-fill: transparent;
+}
+.axis-label {
+    -fx-text-fill: transparent;
+}
+.axis {
+    -fx-tick-label-fill: transparent;
+    -fx-tick-mark-stroke: transparent;
+    -fx-tick-labels-visible: false;
+    -fx-vertical-grid-lines-visible: false;
+    -fx-horizontal-grid-lines-visible: false;
+}
+.default-color0.chart-series-line {
+    -fx-stroke: #00f8da;
+    -fx-stroke-width:0.25em;
+}
+.chart .axis {
+    -fx-border-color: transparent;
+}
+.chart-horizontal-grid-lines,
+.chart-vertical-grid-lines,
+.chart-vertical-zero-line,
+.chart-horizontal-zero-line,
+.axis-tick-mark,
+.axis-minor-tick-mark,
+.chart-series-line{
+    -fx-stroke: transparent;
+}
+.chart-legend{
+    -fx-background-color: transparent;
+    -fx-fill: transparent;
+    -fx-padding: 0;
+    -fx-shape: " "; /* Removes the icon shape */
+    -fx-scale-x: 0; /* Scales down the icon horizontally */
+    -fx-scale-y: 0; /* Scales down the icon vertically */
+    -fx-translate-x: -9999; /* Moves the icon off-screen */
+}
+
+
