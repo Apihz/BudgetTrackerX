@@ -1,10 +1,15 @@
 package com.biscuittaiger.budgettrackerx.App;
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class DashboardApp {
     private String userId;
@@ -65,4 +70,47 @@ public class DashboardApp {
     public double getSavings(int month) {
         return userData.get(month - 1).get(4);
     }
+
+    public String getMonthName(int monthname) {
+        switch(monthname) {
+            case 1: return "January";
+            case 2: return "February";
+            case 3: return "March";
+            case 4: return "April";
+            case 5: return "May";
+            case 6: return "June";
+            case 7: return "July";
+            case 8: return "August";
+            case 9: return "September";
+            case 10: return "October";
+            case 11: return "November";
+            case 12: return "December";
+            default: return "";
+        }
+    }
+
+    public LineChart<Number, Number> createLineChart(String title, Function<Integer, Number> dataFunction) {
+        NumberAxis xAxis = new NumberAxis(1, 12, 1);
+        NumberAxis yAxis = new NumberAxis();
+
+        LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setId("customLineChart");
+        lineChart.setTitle(title);
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+
+        for (int i = 1; i <= 12; i++) {
+            series.getData().add(new XYChart.Data<>(i, dataFunction.apply(i)));
+        }
+
+        lineChart.getData().add(series);
+
+        for (XYChart.Data<Number, Number> data : series.getData()) {
+            data.getNode().setStyle("-fx-background-color: transparent, transparent;");
+        }
+
+        return lineChart;
+    }
+
+
 }

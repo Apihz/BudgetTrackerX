@@ -13,11 +13,42 @@
 #notificationButton {
     -fx-background-color: #252728;
     -fx-background-radius: 1em; /* Use em for relative size */
-    -fx-translate-x: 1em;
-    -fx-translate-y: 1em;
+    -fx-translate-x: 31em;
+    -fx-translate-y: 0.5em;
 }
 #monthMenuButton {
     -fx-background-color: #252728;
+    -fx-background-radius: 0.7em;
+}
+#recentTransaction{
+    -fx-background-color: #111011;
+    -fx-background-radius: 1em;
+    -fx-translate-x: 1em;
+    -fx-translate-y: 4em;
+    -fx-text-fill: White;
+    -fx-min-width: 60em;
+    -fx-min-height: 39em;
+}
+#recentTransactionText{
+    -fx-text-fill: WHITE;
+    -fx-translate-x: 1em;
+    -fx-translate-y: 8px;
+    -fx-font-size: 13px;
+}
+
+#savingGoals{
+    -fx-background-color:#111011;
+    -fx-background-radius: 1em;
+    -fx-translate-x: 1em;
+    -fx-translate-y: 4em;
+    -fx-text-fill: White;
+    -fx-min-width: 26em;
+    -fx-min-height: 37em;
+}
+#savingGoalsLabel{
+    -fx-text-fill: WHITE;
+    -fx-translate-y:1em;
+    -fx-translate-x: 2em;
 }
 .menu-button {
     -fx-base: #252728;
@@ -57,6 +88,23 @@
     -fx-max-width: Infinity;
     -fx-max-height: Infinity;
 }
+#detailLabel{
+    -fx-translate-y: 1em;
+    -fx-translate-x: 1em;
+    -fx-text-fill: white;
+
+}
+#transHeaderLabel{
+    -fx-text-fill: WHite;
+    -fx-translate-x:1em;
+    -fx-translate-y: 1em;
+ }
+
+#scrollPane{
+    -fx-background-color: #252728;
+    -fx-fill: #252728;
+}
+
 .chart-plot-background {
     -fx-background-color: transparent;
 }
@@ -99,4 +147,54 @@
     -fx-translate-x: -9999; /* Moves the icon off-screen */
 }
 
+.expense-pie-chart .chart-pie {
+    -fx-pie-fill: transparent;
+    -fx-max-height: 100px;
+    -fx-max-width: 100px;
+}
 
+.expense-pie-chart .chart-pie-label {
+    -fx-fill: white;
+    -fx-font-size: 2px;
+}
+
+.expense-pie-chart .data0.chart-pie {
+    -fx-pie-color: #524ed7; /* Rent Color */
+}
+
+.expense-pie-chart .data1.chart-pie {
+    -fx-pie-color: #fa4970; /* Restaurants Color */
+}
+
+.expense-pie-chart .data2.chart-pie {
+    -fx-pie-color: #00d2c6; /* Groceries Color */
+}
+
+.expense-pie-chart .data3.chart-pie {
+    -fx-pie-color: #ffa726; /* Other Color */
+}
+
+.expense-pie-chart .chart-pie-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Additional Styles */
+.pie-background {
+    -fx-background-color: #212121; /* Background color */
+    -fx-padding: 20px;
+}
+
+.chart-legend {
+    -fx-text-fill: white;
+}
+
+.chart-legend-item {
+    -fx-text-fill: white;
+}
+
+.scroll-pane, .scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+    -fx-background: #111011;
+    -fx-border-color: #111011;
+}

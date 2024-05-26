@@ -62,14 +62,14 @@ public class MainAppView extends Application {
         root.getChildren().addAll(leftBar, rightBar);
         HBox.setHgrow(rightBar, Priority.ALWAYS);
 
-        Scene scene = new Scene(root, 1250, 800);
+        Scene scene = new Scene(root, 1300, 800);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Budget Tracker");
         primaryStage.setMinWidth(1200*0.8);
         primaryStage.setMinHeight(800*0.8);
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> adjustFontSize(root, newVal.doubleValue(), primaryStage.getHeight()));
         primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> adjustFontSize(root, primaryStage.getWidth(), newVal.doubleValue()));
-
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
