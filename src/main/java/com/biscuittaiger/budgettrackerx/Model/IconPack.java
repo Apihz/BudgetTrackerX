@@ -11,13 +11,14 @@ public class IconPack {
     private Image analyticsIcon = new Image(getClass().getResourceAsStream(iconPackPath + "analytics.png"));
     private Image savingsIcon = new Image(getClass().getResourceAsStream(iconPackPath + "savings.png"));
     private Image notificationIcon = new Image(getClass().getResourceAsStream(iconPackPath + "notification.png"));
+    private Image planningIcon = new Image(getClass().getResourceAsStream(iconPackPath + "planning.png"));
 
     private ImageView dashboardIconUse = new ImageView(dashboardIcon);
     private ImageView transactionIconUse = new ImageView(transactionIcon);
     private ImageView analyticsIconUse = new ImageView(analyticsIcon);
     private ImageView savingsIconUse = new ImageView(savingsIcon);
     private ImageView notificationIconUse = new ImageView(notificationIcon);
-
+    private ImageView planningIconUse = new ImageView(planningIcon);
 
     public IconPack() {
         ImageViewSizing();
@@ -29,6 +30,7 @@ public class IconPack {
         setImageViewSize(analyticsIconUse, 23, 23);
         setImageViewSize(savingsIconUse, 23, 23);
         setImageViewSize(notificationIconUse, 23, 23);
+        setImageViewSize(planningIconUse, 23, 23);
     }
 
     private void setImageViewSize(ImageView imageView, double width, double height) {
@@ -55,4 +57,6 @@ public class IconPack {
     public ImageView getNotificationIcon() {
         return notificationIconUse;
     }
+
+    public ImageView getPlanningIcon() {return planningIconUse;}
 }

@@ -14,8 +14,7 @@ import javafx.stage.Stage;
 
 public class MainAppView extends Application {
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage, String userId, String username) {
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/mainApp.css").toExternalForm();
 
         FontPack fontPack = new FontPack();
@@ -45,10 +44,13 @@ public class MainAppView extends Application {
         Button button3 = new Button("Analytics");
         button3.setId("button3");
         button3.setGraphic(icon.getAnalyticsIcon());
-        Button button4 = new Button("Saving goals");
+        Button button4 = new Button("Budget Planning");
         button4.setId("button4");
-        button4.setGraphic(icon.getSavingsIcon());
-        leftToolBar.getChildren().addAll(leftHeader, button1, button2, button3, button4);
+        button4.setGraphic(icon.getPlanningIcon());
+        Button button5 = new Button("Notification");
+        button5.setId("button5");
+        button5.setGraphic(icon.getNotificationIcon());
+        leftToolBar.getChildren().addAll(leftHeader, button1, button2, button3, button4, button5);
         leftBar.getChildren().addAll(leftHeader, leftToolBar);
 
         VBox rightBar = new VBox();
@@ -57,7 +59,7 @@ public class MainAppView extends Application {
         rightBar.minWidthProperty().bind(root.widthProperty().multiply(0.8)); // 80% width
 
         DashboardView dashboardView = new DashboardView();
-        rightBar.getChildren().add(dashboardView.DashboardOverview());
+        rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));
 
         root.getChildren().addAll(leftBar, rightBar);
         HBox.setHgrow(rightBar, Priority.ALWAYS);
@@ -81,5 +83,10 @@ public class MainAppView extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
     }
 }

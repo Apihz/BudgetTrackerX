@@ -4,17 +4,20 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class DashboardApp {
     private String userId;
     private int month;
     private ArrayList<ArrayList<Double>> userData = new ArrayList<>();
+    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/App/budget_info.txt");
 
     public DashboardApp(String userId, int month) {
         this.userId = userId;
@@ -25,13 +28,13 @@ public class DashboardApp {
     }
 
     public void readInformationFromFile() {
-        InputStream file = getClass().getResourceAsStream("/com/biscuittaiger/budgettrackerx/budget_info.txt");
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file))) {
+        try (InputStream file = Files.newInputStream(USERS_FILE);
+             BufferedReader br = new BufferedReader(new InputStreamReader(file))) {
             String line;
             br.readLine(); // Skip header line
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
+                System.out.println("Read line: " + line);  // Debug line
 
                 if (data.length == 7 && data[0].equals(userId)) {
                     int dataMonth = Integer.parseInt(data[1]);
@@ -43,6 +46,7 @@ public class DashboardApp {
                         monthData.add(Double.parseDouble(data[5]));
                         monthData.add(Double.parseDouble(data[6]));
                         userData.set(dataMonth - 1, monthData);
+                        System.out.println("Data for month " + dataMonth + ": " + monthData);  // Debug line
                     }
                 }
             }
@@ -72,7 +76,7 @@ public class DashboardApp {
     }
 
     public String getMonthName(int monthname) {
-        switch(monthname) {
+        switch (monthname) {
             case 1: return "January";
             case 2: return "February";
             case 3: return "March";
@@ -112,5 +116,14 @@ public class DashboardApp {
         return lineChart;
     }
 
-
+    public void initializeNewAccount() {
+        try (BufferedWriter writer = Files.newBufferedWriter(USERS_FILE, StandardOpenOption.APPEND)) {
+            for (int month = 1; month <= 12; month++) {
+                writer.write(userId + "," + month + ",0,0,0,0,0");
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -14,7 +14,7 @@
 #leftBar {
     -fx-background-color: #101010;
 }
-#button1, #button2, #button3, #button4 {
+#button1, #button2, #button3, #button4, #button5{
     -fx-text-fill: white;
     -fx-font-size: 1.2em; /* Use em for relative size */
     -fx-font-weight: bold;
@@ -25,11 +25,11 @@
     -fx-alignment: baseline-left;
     -fx-graphic-text-gap: 0.5em; /* Use em for relative size */
 }
-#button1:hover, #button2:hover, #button3:hover, #button4:hover {
+#button1:hover, #button2:hover, #button3:hover, #button4:hover, #button5:hover {
     -fx-background-color: derive(#252728, 25%);
     -fx-background-radius: 0.5em;
     -fx-cursor: hand;
 }
-#button1:pressed, #button2:pressed, #button3:pressed, #button4:pressed {
+#button1:pressed, #button2:pressed, #button3:pressed, #button4:pressed,#button5:pressed {
     -fx-background-color: #252728;
 }

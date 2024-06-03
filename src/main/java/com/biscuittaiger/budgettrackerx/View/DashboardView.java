@@ -2,15 +2,24 @@ package com.biscuittaiger.budgettrackerx.View;
 
 import com.biscuittaiger.budgettrackerx.App.DashboardApp;
 import com.biscuittaiger.budgettrackerx.Model.IconPack;
+import com.biscuittaiger.budgettrackerx.Model.Transaction;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.Node;
+import javafx.util.Duration;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class DashboardView {
@@ -21,13 +30,15 @@ public class DashboardView {
     private Text savingsText;
     private int month;
     private DashboardApp dashboard;
+    private Label dateTimeLabel;
 
-    public VBox DashboardOverview() {
+    @SuppressWarnings("unchecked")
+    public VBox DashboardOverview(String userId, String username) {
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/dashboardX.css").toExternalForm();
         IconPack icon = new IconPack();
 
         month = 1; // Initialize month to January
-        dashboard = new DashboardApp("1", month);
+        dashboard = new DashboardApp(userId, month);
         dashboard.readInformationFromFile();
 
         VBox root = new VBox();
@@ -36,7 +47,7 @@ public class DashboardView {
         HBox topHeader = new HBox();
         topHeader.setId("topHeader");
         VBox greetings = new VBox();
-        Label headerLabel = new Label("Welcome to Budget Tracker");
+        Label headerLabel = new Label("Welcome back "+username+" to Budget Tracker");
         headerLabel.setId("headerLabel");
         Text headerText = new Text("Track, manage and forecast your budgets and expenditure");
         headerText.setId("headerText");
@@ -60,10 +71,15 @@ public class DashboardView {
         Pane menuPane = new Pane();
         menuPane.getChildren().add(monthMenuButton);
 
-        Button notificationButton = new Button();
-        notificationButton.setId("notificationButton");
-        notificationButton.setGraphic(icon.getNotificationIcon());
-        topHeader.getChildren().addAll(greetings, notificationButton);
+        dateTimeLabel = new Label();
+        dateTimeLabel.setId("dateTimeLabel");
+        updateDateTime();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateDateTime()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+        topHeader.getChildren().addAll(greetings,dateTimeLabel);
 
         HBox moneyOverview = new HBox(10);
         moneyOverview.setId("moneyOverview");
@@ -123,43 +139,56 @@ public class DashboardView {
 
         VBox recentTransaction = new VBox(20);
         recentTransaction.setId("recentTransaction");
-        Label recentTransactionText = new Label("Recent Transaction");recentTransactionText.setId("recentTransactionText");
 
+        Label recentTransactionText = new Label("Recent Transaction");
+        recentTransactionText.setId("recentTransactionText");
 
-        GridPane transactionGrid = new GridPane();
-        transactionGrid.setId("transactionGrid");
-        transactionGrid.setHgap(150);
-        transactionGrid.setVgap(25);
-        GridPane headerGrid = new GridPane();
-        headerGrid.setId("headerGrid");
-        headerGrid.setHgap(150);
-        headerGrid.setVgap(0);
+        TableView<Transaction> transactionTable = new TableView<>();
+        transactionTable.setId("transactionTable");
 
-        String[] transactionHeaders = {"Transaction","Amount","Date","Category"};
-        String[] testTransItem = {"Beli shopii","RM70","13/2/17","Shopping"};
+        TableColumn<Transaction, String> transactionId = new TableColumn<>("ID");
+        transactionId.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(transactionGrid);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setPrefHeight(380);
+        TableColumn<Transaction, String> transactionCol = new TableColumn<>("Transaction");
+        transactionCol.setCellValueFactory(new PropertyValueFactory<>("transaction"));
 
-        for(int col = 0; col < transactionHeaders.length; col++) {
-            Label transHeaderLabel = new Label(transactionHeaders[col]);
-            transHeaderLabel.setId("transHeaderLabel");
-            headerGrid.add(transHeaderLabel, col, 0);
+        TableColumn<Transaction, String> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+
+        TableColumn<Transaction, String> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        TableColumn<Transaction, String> categoryCol = new TableColumn<>("Category");
+        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+
+        transactionId.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.05));
+        transactionCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.37));
+        amountCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.15));
+        dateCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.2));
+        categoryCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.2));
+
+        transactionId.setResizable(false);
+        transactionCol.setResizable(false);
+        amountCol.setResizable(false);
+        dateCol.setResizable(false);
+        categoryCol.setResizable(false);
+
+        transactionTable.setPrefWidth(350);
+
+        transactionTable.getColumns().addAll(transactionId,transactionCol, amountCol, dateCol, categoryCol);
+
+        ObservableList<Transaction> data = FXCollections.observableArrayList();
+        String[] testTransItem = {"1" ,"Beli shopii", "RM70", "13/2/17", "Shopping"};
+        for (int i = 0; i < 100; i++) {
+            data.add(new Transaction(testTransItem[0], testTransItem[1], testTransItem[2], testTransItem[3], testTransItem[4]));
         }
-        for(int row = 0; row < 100; row++) {
-            for(int col = 0; col < transactionHeaders.length; col++) {
-                Label detailLabel = new Label(testTransItem[col]);
-                detailLabel.setId("detailLabel");
-                transactionGrid.add(detailLabel, col, row);
-            }
-        }
+        transactionTable.setItems(data);
 
-        recentTransaction.getChildren().addAll(recentTransactionText,headerGrid, transactionGrid,scrollPane);
+        recentTransaction.getChildren().addAll(recentTransactionText, transactionTable);
 
         VBox savingGoals = new VBox();
         savingGoals.setId("savingGoals");
+        Label savingHeaderLabel = new Label("Saving Goals");savingHeaderLabel.setId("savingHeaderLabel");
         VBox goalsBox = new VBox();
         goalsBox.setId("goalsBox");
 
@@ -168,7 +197,7 @@ public class DashboardView {
             savingGoals.getChildren().add(savingGoalsLabel);
         }
 
-        savingGoals.getChildren().add(goalsBox);
+        savingGoals.getChildren().addAll(savingHeaderLabel,goalsBox);
 
         thirdRow.getChildren().addAll(recentTransaction,savingGoals);
 
@@ -191,6 +220,13 @@ public class DashboardView {
         expenseText.setText("RM " + dashboard.getExpense(month));
         budgetText.setText("RM " + dashboard.getBudget(month));
         savingsText.setText("RM " + dashboard.getSavings(month));
+    }
+    private void updateDateTime() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE hh:mm:ss a");
+        String formattedDateTime = now.format(formatter);
+        formattedDateTime = formattedDateTime.toUpperCase();
+        dateTimeLabel.setText(formattedDateTime);
     }
 
 
