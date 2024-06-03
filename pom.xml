@@ -62,7 +62,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.biscuittaiger.budgettrackerx/com.biscuittaiger.budgettrackerx.App.HelloApplication
+                                com.biscuittaiger.budgettrackerx/com.biscuittaiger.budgettrackerx.App.TestLoginApp
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
