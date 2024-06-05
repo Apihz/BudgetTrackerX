@@ -14,12 +14,13 @@
     -fx-text-fill: WHite;
     -fx-font-size: 35px;
     -fx-translate-y: 25px;
-    -fx-translate-x: 55px;
+    -fx-translate-x: 50px;
     -fx-background-color: #1e1e1e;
     -fx-background-radius: 10px;
     -fx-padding: 6px;
     -fx-min-height: 60px;
-    -fx-min-width: 400px;
+    -fx-min-width: 100px;
+    -fx-max-width: 450px;
 }
 #monthMenuButton {
     -fx-background-color: #252728;
