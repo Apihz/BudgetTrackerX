@@ -12,6 +12,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.security.auth.login.AccountLockedException;
+
 public class MainAppView extends Application {
 
     public void start(Stage primaryStage, String userId, String username) {
@@ -33,14 +35,27 @@ public class MainAppView extends Application {
         leftToolBar.setId("leftToolBar");
         leftToolBar.setPadding(new Insets(100, 10, 10, 10));
 
-        IconPack icon = new IconPack();
+        VBox rightBar = new VBox();
+        rightBar.setId("rightBar");
 
+        IconPack icon = new IconPack();
+        DashboardView dashboardView = new DashboardView();
+        TransactionView transactionView = new TransactionView(userId);
+        rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));//initialized dashboardView upon successful login
         Button button1 = new Button("Dashboard");
         button1.setId("button1");
         button1.setGraphic(icon.getDashboardIcon());
+        button1.setOnAction(e ->  {
+            rightBar.getChildren().clear();
+            rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));
+        });
         Button button2 = new Button("Transaction");
         button2.setId("button2");
         button2.setGraphic(icon.getTransactionIcon());
+        button2.setOnAction(e -> {
+            rightBar.getChildren().clear();
+            rightBar.getChildren().add(transactionView.getTransactionView());
+        });
         Button button3 = new Button("Analytics");
         button3.setId("button3");
         button3.setGraphic(icon.getAnalyticsIcon());
@@ -53,13 +68,12 @@ public class MainAppView extends Application {
         leftToolBar.getChildren().addAll(leftHeader, button1, button2, button3, button4, button5);
         leftBar.getChildren().addAll(leftHeader, leftToolBar);
 
-        VBox rightBar = new VBox();
-        rightBar.setId("rightBar");
+
         VBox.setVgrow(rightBar, Priority.ALWAYS);
         rightBar.minWidthProperty().bind(root.widthProperty().multiply(0.8)); // 80% width
 
-        DashboardView dashboardView = new DashboardView();
-        rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));
+
+
 
         root.getChildren().addAll(leftBar, rightBar);
         HBox.setHgrow(rightBar, Priority.ALWAYS);

@@ -2,7 +2,7 @@ package com.biscuittaiger.budgettrackerx.View;
 
 import com.biscuittaiger.budgettrackerx.App.DashboardApp;
 import com.biscuittaiger.budgettrackerx.Model.IconPack;
-import com.biscuittaiger.budgettrackerx.Model.Transaction;
+import com.biscuittaiger.budgettrackerx.Model.TransactionD;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -140,25 +140,25 @@ public class DashboardView {
         VBox recentTransaction = new VBox(20);
         recentTransaction.setId("recentTransaction");
 
-        Label recentTransactionText = new Label("Recent Transaction");
+        Label recentTransactionText = new Label("Recent TransactionD");
         recentTransactionText.setId("recentTransactionText");
 
-        TableView<Transaction> transactionTable = new TableView<>();
+        TableView<TransactionD> transactionTable = new TableView<>();
         transactionTable.setId("transactionTable");
 
-        TableColumn<Transaction, String> transactionId = new TableColumn<>("ID");
+        TableColumn<TransactionD, String> transactionId = new TableColumn<>("ID");
         transactionId.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
 
-        TableColumn<Transaction, String> transactionCol = new TableColumn<>("Transaction");
+        TableColumn<TransactionD, String> transactionCol = new TableColumn<>("TransactionD");
         transactionCol.setCellValueFactory(new PropertyValueFactory<>("transaction"));
 
-        TableColumn<Transaction, String> amountCol = new TableColumn<>("Amount");
+        TableColumn<TransactionD, String> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
 
-        TableColumn<Transaction, String> dateCol = new TableColumn<>("Date");
+        TableColumn<TransactionD, String> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        TableColumn<Transaction, String> categoryCol = new TableColumn<>("Category");
+        TableColumn<TransactionD, String> categoryCol = new TableColumn<>("Category");
         categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
 
         transactionId.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.05));
@@ -177,10 +177,10 @@ public class DashboardView {
 
         transactionTable.getColumns().addAll(transactionId,transactionCol, amountCol, dateCol, categoryCol);
 
-        ObservableList<Transaction> data = FXCollections.observableArrayList();
+        ObservableList<TransactionD> data = FXCollections.observableArrayList();
         String[] testTransItem = {"1" ,"Beli shopii", "RM70", "13/2/17", "Shopping"};
         for (int i = 0; i < 100; i++) {
-            data.add(new Transaction(testTransItem[0], testTransItem[1], testTransItem[2], testTransItem[3], testTransItem[4]));
+            data.add(new TransactionD(testTransItem[0], testTransItem[1], testTransItem[2], testTransItem[3], testTransItem[4]));
         }
         transactionTable.setItems(data);
 
@@ -223,7 +223,7 @@ public class DashboardView {
     }
     private void updateDateTime() {
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE hh:mm:ss a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE hh:mm:ss a");
         String formattedDateTime = now.format(formatter);
         formattedDateTime = formattedDateTime.toUpperCase();
         dateTimeLabel.setText(formattedDateTime);

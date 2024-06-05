@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -34,8 +36,6 @@ public class DashboardApp {
             br.readLine(); // Skip header line
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                System.out.println("Read line: " + line);  // Debug line
-
                 if (data.length == 7 && data[0].equals(userId)) {
                     int dataMonth = Integer.parseInt(data[1]);
                     if (dataMonth >= 1 && dataMonth <= 12) {
@@ -46,7 +46,6 @@ public class DashboardApp {
                         monthData.add(Double.parseDouble(data[5]));
                         monthData.add(Double.parseDouble(data[6]));
                         userData.set(dataMonth - 1, monthData);
-                        System.out.println("Data for month " + dataMonth + ": " + monthData);  // Debug line
                     }
                 }
             }
@@ -126,4 +125,5 @@ public class DashboardApp {
             e.printStackTrace();
         }
     }
+
 }

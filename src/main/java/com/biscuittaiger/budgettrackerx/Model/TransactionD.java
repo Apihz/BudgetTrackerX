@@ -1,13 +1,13 @@
 package com.biscuittaiger.budgettrackerx.Model;
 
-public class Transaction {
+public class TransactionD {
     private final String transactionId;
     private final String transaction;
     private final String amount;
     private final String date;
     private final String category;
 
-    public Transaction(String transactionId,String transaction, String amount, String date, String category) {
+    public TransactionD(String transactionId, String transaction, String amount, String date, String category) {
         this.transactionId = transactionId;
         this.transaction = transaction;
         this.amount = amount;
