@@ -174,12 +174,13 @@ public class DashboardView {
         categoryCol.setResizable(false);
 
         transactionTable.setPrefWidth(350);
+        transactionTable.setMaxHeight(375);
 
         transactionTable.getColumns().addAll(transactionId,transactionCol, amountCol, dateCol, categoryCol);
 
         ObservableList<TransactionD> data = FXCollections.observableArrayList();
         String[] testTransItem = {"1" ,"Beli shopii", "RM70", "13/2/17", "Shopping"};
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 5; i++) {
             data.add(new TransactionD(testTransItem[0], testTransItem[1], testTransItem[2], testTransItem[3], testTransItem[4]));
         }
         transactionTable.setItems(data);

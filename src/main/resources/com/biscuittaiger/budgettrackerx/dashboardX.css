@@ -34,7 +34,7 @@
     -fx-translate-y: 4em;
     -fx-text-fill: White;
     -fx-min-width: 60em;
-    -fx-min-height: 39em;
+    -fx-min-height: 35em;
 }
 #recentTransactionText{
     -fx-text-fill: WHITE;
@@ -50,7 +50,7 @@
     -fx-translate-y: 4em;
     -fx-text-fill: White;
     -fx-min-width: 26em;
-    -fx-min-height: 37em;
+    -fx-min-height: 35em;
 }
 #savingGoalsLabel{
     -fx-text-fill: WHITE;
@@ -160,52 +160,6 @@
     -fx-scale-x: 0; /* Scales down the icon horizontally */
     -fx-scale-y: 0; /* Scales down the icon vertically */
     -fx-translate-x: -9999; /* Moves the icon off-screen */
-}
-
-.expense-pie-chart .chart-pie {
-    -fx-pie-fill: transparent;
-    -fx-max-height: 100px;
-    -fx-max-width: 100px;
-}
-
-.expense-pie-chart .chart-pie-label {
-    -fx-fill: white;
-    -fx-font-size: 2px;
-}
-
-.expense-pie-chart .data0.chart-pie {
-    -fx-pie-color: #524ed7; /* Rent Color */
-}
-
-.expense-pie-chart .data1.chart-pie {
-    -fx-pie-color: #fa4970; /* Restaurants Color */
-}
-
-.expense-pie-chart .data2.chart-pie {
-    -fx-pie-color: #00d2c6; /* Groceries Color */
-}
-
-.expense-pie-chart .data3.chart-pie {
-    -fx-pie-color: #ffa726; /* Other Color */
-}
-
-.expense-pie-chart .chart-pie-label {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-/* Additional Styles */
-.pie-background {
-    -fx-background-color: #212121; /* Background color */
-    -fx-padding: 20px;
-}
-
-.chart-legend {
-    -fx-text-fill: white;
-}
-
-.chart-legend-item {
-    -fx-text-fill: white;
 }
 
 
