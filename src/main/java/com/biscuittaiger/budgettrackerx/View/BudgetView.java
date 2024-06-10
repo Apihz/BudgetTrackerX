@@ -29,7 +29,7 @@ public class BudgetView {
     private Label expenseLabel;
     private Label withinBudgetLabel;
     private String userId;
-    private static final String BudgetFile = "src/main/java/com/biscuittaiger/budgettrackerx/View/BudgetData.txt";
+    private static final String BudgetFile = "src/main/java/com/biscuittaiger/budgettrackerx/Model/BudgetData.txt";
     private static ArrayList<BudgetApp> budgetList = new ArrayList<>();
 
 
@@ -322,7 +322,7 @@ public class BudgetView {
     }
 
     public static void updateDashboardBudgetInfo(String userId, int month, double updatedBudget) {
-        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/App/budget_info.txt";
+        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt";
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));

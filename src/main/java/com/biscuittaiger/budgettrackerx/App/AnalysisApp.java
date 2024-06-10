@@ -31,7 +31,7 @@ public class AnalysisApp extends VBox {
 
     private void loadData(String userId) {
         userData = new ArrayList<>();
-        String filename = "src/main/java/com/biscuittaiger/budgettrackerx/App/budget_info.txt";
+        String filename = "src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;

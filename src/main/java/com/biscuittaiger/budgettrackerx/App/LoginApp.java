@@ -1,7 +1,7 @@
 package com.biscuittaiger.budgettrackerx.App;
 
 import com.biscuittaiger.budgettrackerx.View.MainAppView;
-import com.biscuittaiger.budgettrackerx.View.TestLoginView;
+import com.biscuittaiger.budgettrackerx.View.LoginView;
 import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -15,15 +15,15 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-public class TestLoginApp extends Application {
+public class LoginApp extends Application {
 
-    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/App/user_info.txt");
-    private TestLoginView loginView;
+    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/Model/user_info.txt");
+    private LoginView loginView;
     private Stage primaryStage;
 
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        loginView = new TestLoginView(primaryStage, this);
+        loginView = new LoginView(primaryStage, this);
         loginView.showLoginPage();
     }
 

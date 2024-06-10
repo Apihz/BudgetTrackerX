@@ -1,6 +1,6 @@
 package com.biscuittaiger.budgettrackerx.View;
 
-import com.biscuittaiger.budgettrackerx.App.TestLoginApp;
+import com.biscuittaiger.budgettrackerx.App.LoginApp;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class TestLoginView {
+public class LoginView {
     private TextField usernameField;
     private PasswordField passwordField;
     private Button loginBtn;
@@ -21,9 +21,9 @@ public class TestLoginView {
     private PasswordField regPasswordField;
     private Button regSubmitBtn;
     private Stage primaryStage;
-    private TestLoginApp loginApp;
+    private LoginApp loginApp;
 
-    public TestLoginView(Stage primaryStage, TestLoginApp loginApp) {
+    public LoginView(Stage primaryStage, LoginApp loginApp) {
         this.primaryStage = primaryStage;
         this.loginApp = loginApp;
     }

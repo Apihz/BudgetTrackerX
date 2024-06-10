@@ -30,12 +30,12 @@ public class TransactionView {
     private Text balanceText;
     private Text savingsText;
     private ComboBox<String> monthComboBox;
-    private final String username;
+    private final String userId;
     private final ArrayList<TransactionApp> transactionApps;
-    private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/View/TransactionTEST.txt";
+    private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionTEST.txt";
 
-    public TransactionView(String username) {
-        this.username = username;
+    public TransactionView(String userId) {
+        this.userId = userId;
         this.transactionApps = new ArrayList<>();
         transactionTable = new TableView<>();
         setupTransactionView();
@@ -50,7 +50,10 @@ public class TransactionView {
         monthComboBox.getItems().addAll(months);
         monthComboBox.setValue("1");
 
-        monthComboBox.setOnAction(event -> fetchAndDisplayTransactions(username, monthComboBox.getValue()));
+        monthComboBox.setOnAction(event -> {
+            fetchAndDisplayTransactions(userId, monthComboBox.getValue());
+            calculateAndUpdateBudgetInfo(userId,Integer.parseInt(monthComboBox.getValue()));
+        });
 
         HBox infoBox = new HBox(10);
         infoBox.setPadding(new Insets(10));
@@ -93,7 +96,7 @@ public class TransactionView {
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
         transactionView.getChildren().addAll(monthComboBox, infoBox, buttonBox, transactionTable);
-        fetchAndDisplayTransactions(username, monthComboBox.getValue());
+        fetchAndDisplayTransactions(userId, monthComboBox.getValue());
         return transactionView;
     }
 
@@ -149,14 +152,8 @@ public class TransactionView {
         return String.format("#%02X%02X%02X", r, g, b);
     }
 
-    private void fetchAndDisplayTransactions(String username, String month) {
+    private void fetchAndDisplayTransactions(String userId, String month) {
         try {
-            String userId = readUserAuthFile(username);
-            if (userId.endsWith("not found")) {
-                transactionTable.getItems().clear();
-                transactionTable.setPlaceholder(new Label(userId));
-                return;
-            }
             ArrayList<TransactionApp> transactionApps = readTransactionInfoFile(userId, month);
             displayTransactionInfo(transactionApps);
         } catch (FileNotFoundException e) {
@@ -226,26 +223,6 @@ public class TransactionView {
         }
     }
 
-    public static String readUserAuthFile(String inputUsrnm) throws FileNotFoundException {
-        Scanner readFile = new Scanner(new File(TRANS_FILE));
-        try {
-            while (readFile.hasNext()) {
-                String line = readFile.nextLine();
-                String[] delimiter = line.split(",");
-                String userId = delimiter[0];
-                String username = delimiter[1];
-                String password = delimiter[2];
-
-                if (username.equals(inputUsrnm)) {
-                    return userId;
-                }
-            }
-        } finally {
-            readFile.close();
-        }
-
-        return "User not found";
-    }
 
     private void showAddTransactionDialog() {
         Stage dialog = new Stage();
@@ -303,12 +280,12 @@ public class TransactionView {
                     return;
                 }
 
-                String userId = readUserAuthFile(username);
+
                 String month = monthComboBox.getValue();
 
                 writeTransactionToFile(userId, month, amount, type, category, details, date.toString());
-                fetchAndDisplayTransactions(username, month);
-
+                fetchAndDisplayTransactions(userId, month);
+                calculateAndUpdateBudgetInfo(userId,Integer.parseInt(month));
                 dialog.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -382,7 +359,7 @@ public class TransactionView {
                 transactionApp.setDate(date.toString());
 
                 updateTransactionFile(transactionApp);
-                fetchAndDisplayTransactions(username, monthComboBox.getValue());
+                fetchAndDisplayTransactions(userId, monthComboBox.getValue());
 
                 dialog.close();
             } catch (IOException e) {
@@ -410,7 +387,7 @@ public class TransactionView {
 
         try {
             deleteTransactionFromFile(selectedTransaction);
-            fetchAndDisplayTransactions(username, monthComboBox.getValue());
+            fetchAndDisplayTransactions(userId, monthComboBox.getValue());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -452,6 +429,87 @@ public class TransactionView {
                     writer.newLine();
                 }
             }
+        }
+    }
+
+    public static void updateDashboardBudgetInfo(String userId, int month, double updatedIncome, double updatedExpense, double updatedBalance, double updatedSavings) {
+        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt";
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            // Read the header line
+            String headerLine = reader.readLine();
+            if (headerLine != null) {
+                stringBuilder.append(headerLine).append("\n");
+            }
+
+            // Read each line and update the values if needed
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                // Check if the line has the correct number of columns and non-empty userId and month
+                if (parts.length == 7 && !parts[0].isEmpty() && !parts[1].isEmpty()) {
+                    // Check if this is the line to edit
+                    if (userId.equals(parts[0]) && String.valueOf(month).equals(parts[1])) {
+                        // Update the values
+                        parts[2] = String.valueOf(updatedIncome);  // Update income
+                        parts[3] = String.valueOf(updatedExpense); // Update expense
+                        parts[4] = String.valueOf(updatedBalance); // Update balance
+                        parts[5] = String.valueOf(updatedSavings); // Update savings
+                    }
+                }
+                // Reconstruct the line
+                StringBuilder newLine = new StringBuilder();
+                for (int i = 0; i < parts.length; i++) {
+                    newLine.append(parts[i]);
+                    if (i < parts.length - 1) {
+                        newLine.append(",");
+                    }
+                }
+
+                stringBuilder.append(newLine.toString()).append("\n");
+            }
+            reader.close();
+
+            // Write the modified content back to the file
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            writer.write(stringBuilder.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void calculateAndUpdateBudgetInfo(String userId, int month) {
+        try {
+            ArrayList<TransactionApp> transactions = readTransactionInfoFile(userId, String.valueOf(month));
+
+            double totalIncome = 0;
+            double totalExpense = 0;
+            double totalBalance = 0;
+            double totalSavings = 0;
+
+            for (TransactionApp transaction : transactions) {
+                double amount = transaction.getAmount();
+                String type = transaction.getType();
+
+                if (type.equals("income")) {
+                    totalIncome += amount;
+                } else if (type.equals("expense")) {
+                    totalExpense += amount;
+                } else if (type.equals("savings")) {
+                    totalSavings += amount;
+                }
+
+                totalBalance = totalIncome - totalExpense - totalSavings;
+            }
+
+            updateDashboardBudgetInfo(userId, month, totalIncome, totalExpense, totalBalance, totalSavings);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

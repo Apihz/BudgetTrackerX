@@ -4,14 +4,9 @@ userId,month,amount,type,category,details,date,tranId
 1,1,39,expense,food,this week,2024-1-8,24
 1,2,501,income,freelance,salary,2024-2-1,24020174
 1,2,40,income,rental income,salary,2024-2-3,24020365
-2,2,70,expense,groceries,weekly,2024-2-10,24021049
 2,3,150,income,freelance,monthly,2024-3-15,24031532
-3,1,300,income,bonus,quarterly,2024-1-20,24012057
-3,2,25,expense,utilities,monthly,2024-2-15,24021591
-3,3,100,expense,entertainment,monthly,2024-3-12,24031284
-3,2,500,income,salary,this month,2024-1-11,24011196
-3,2,0.50,income,salary,lool,2024-2-1,24020118
-3,2,0.50,savings,dunno,future,2024-2-3,24020373
+2,1,300,income,bonus,quarterly,2024-1-20,24012057
+2,3,100,expense,entertainment,monthly,2024-3-12,24031284
 3,2,12,expense,food,daily,2024-2-5,24020547
 3,11,1000.0,income,investment,loool,2024-11-13,24111028
 3,12,100,expense,travel,year-end,2024-12-20,24122064
@@ -30,3 +25,6 @@ userId,month,amount,type,category,details,date,tranId
 1,1,1000,savings,beli lambo,Fund for lambo,2024-06-10,f2d06d93-22d3-42a5-a2e9-67ef11f5d135
 1,1,1000,savings,Tabung nikah,KOntol,2024-06-10,a46022a2-84bb-42ff-9122-16dafcdf8d8a
 1,1,12,income,income,2e1e,2024-06-10,ef8396bd-7cd8-4a1a-a0e9-b96a248eb227
+2,6,999.00,expense,shopping,dwd,2024-06-11,dwd
+2,1,1000,income,income,gaji,2024-06-11,0c17ef16-0654-4436-9f02-94118f7bbd61
+2,1,10,income,income,2,2024-06-11,1290c8a0-2324-4ff9-8884-36fe512aeab0

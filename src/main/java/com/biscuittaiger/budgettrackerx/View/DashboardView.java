@@ -285,7 +285,7 @@ public class DashboardView {
 
     private ObservableList<TransactionApp> getTransactionsFromFile(String userId, String month) {
         ObservableList<TransactionApp> transactions = FXCollections.observableArrayList();
-        String fileName = "src/main/java/com/biscuittaiger/budgettrackerx/View/TransactionTEST.txt";
+        String fileName = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionTEST.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line = br.readLine(); // Skip the header
