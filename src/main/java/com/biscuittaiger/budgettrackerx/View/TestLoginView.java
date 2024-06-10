@@ -59,8 +59,8 @@ public class TestLoginView {
         gridpane.add(usernameField, 1, 0);
         gridpane.add(passwordlbl, 0, 1);
         gridpane.add(passwordField, 1, 1);
-        gridpane.add(loginBtn, 0, 2);
-        gridpane.add(clearBtn, 1, 2);
+        gridpane.add(loginBtn, 1, 2);
+        gridpane.add(clearBtn, 0, 2);
         gridpane.add(registerlbl, 0, 3);
         gridpane.add(registerBtn, 0, 4);
 

@@ -258,7 +258,7 @@ public class TransactionView {
 
         TextField amountField = new TextField();
         ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList("income", "expense", "savings"));
-        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Shopping", "Transportation", "Other Expenses"));
+        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Transportation", "Other Expenses"));
         TextField categoryDisplayField = new TextField();
         categoryDisplayField.setEditable(false);
         categoryDisplayField.setVisible(false); // Initially hidden

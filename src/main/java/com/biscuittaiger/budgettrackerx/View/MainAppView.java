@@ -12,8 +12,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.security.auth.login.AccountLockedException;
-
 public class MainAppView extends Application {
 
     public void start(Stage primaryStage, String userId, String username) {
@@ -41,6 +39,9 @@ public class MainAppView extends Application {
         IconPack icon = new IconPack();
         DashboardView dashboardView = new DashboardView();
         TransactionView transactionView = new TransactionView(userId);
+        BudgetView budgetView = new BudgetView();
+        AnalysisView analysisView = new AnalysisView();
+
         rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));//initialized dashboardView upon successful login
         Button button1 = new Button("Dashboard");
         button1.setId("button1");
@@ -59,9 +60,17 @@ public class MainAppView extends Application {
         Button button3 = new Button("Analytics");
         button3.setId("button3");
         button3.setGraphic(icon.getAnalyticsIcon());
+        button3.setOnAction(e -> {
+            rightBar.getChildren().clear();
+            rightBar.getChildren().add(analysisView.ExpenseAnalysisApp(userId));
+        });
         Button button4 = new Button("Budget Planning");
         button4.setId("button4");
         button4.setGraphic(icon.getPlanningIcon());
+        button4.setOnAction(e -> {
+            rightBar.getChildren().clear();
+            rightBar.getChildren().add(budgetView.BudgetView(userId));
+        });
         Button button5 = new Button("Notification");
         button5.setId("button5");
         button5.setGraphic(icon.getNotificationIcon());

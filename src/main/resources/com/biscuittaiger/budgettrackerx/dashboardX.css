@@ -43,7 +43,7 @@
     -fx-font-size: 13px;
 }
 
-#savingGoals{
+#notificationBox{
     -fx-background-color:#111011;
     -fx-background-radius: 1em;
     -fx-translate-x: 1em;
@@ -52,15 +52,15 @@
     -fx-min-width: 26em;
     -fx-min-height: 35em;
 }
-#savingGoalsLabel{
+#notifications{
     -fx-text-fill: WHITE;
     -fx-translate-y:4em;
     -fx-translate-x: 2em;
 }
-#savingHeaderLabel{
-    -fx-font-size: 20px;
+#notificationText{
+    -fx-font-size: 15px;
     -fx-text-fill: WHITE;
-    -fx-translate-y:0em;
+    -fx-translate-y:0.5em;
     -fx-translate-x: 1em;
 }
 .menu-button {

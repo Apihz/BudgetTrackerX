@@ -1,0 +1,9 @@
+.root{
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+#monthSelection{
+     -fx-base:#252728;
+     -fx-translate-x: 10px;
+     -fx-translate-y: 10px;
+ }

@@ -27,3 +27,6 @@ userId,month,amount,type,category,details,date,tranId
 1,1,2134,expense,shees,12312,2024-12-12,de2b84f4-07d8-4f87-b1e5-c2e5816973fc
 1,1,100111,income,Other Expenses,BOS BAGI HEHEHEHE,2024-06-10,c2b85609-83ac-40f9-9e4a-3ec778a0cb41
 1,1,89,expense,Education,iuhiu,2024-05-30,4a80e50f-cf9b-4954-878d-218f46c3bc32
+1,1,1000,savings,beli lambo,Fund for lambo,2024-06-10,f2d06d93-22d3-42a5-a2e9-67ef11f5d135
+1,1,1000,savings,Tabung nikah,KOntol,2024-06-10,a46022a2-84bb-42ff-9122-16dafcdf8d8a
+1,1,12,income,income,2e1e,2024-06-10,ef8396bd-7cd8-4a1a-a0e9-b96a248eb227

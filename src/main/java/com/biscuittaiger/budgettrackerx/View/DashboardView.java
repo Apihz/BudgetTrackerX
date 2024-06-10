@@ -203,22 +203,25 @@ public class DashboardView {
 
         updateTransactions(userId, transactionTable);
 
-        VBox savingGoals = new VBox();
-        savingGoals.setId("savingGoals");
-        Label savingHeaderLabel = new Label("Saving Goals");
-        savingHeaderLabel.setId("savingHeaderLabel");
-        VBox goalsBox = new VBox();
-        goalsBox.setId("goalsBox");
+        VBox notificationBox = new VBox();
+        notificationBox.setId("notificationBox");
+        Label notificationText = new Label("Notifications");
+        notificationText.setId("notificationText");
+        VBox notificationHeader = new VBox();
+        notificationHeader.setId("notificationHeader");
+        notificationHeader.getChildren().addAll(notificationText);
+        VBox notifications = new VBox();
+        notifications.setId("notifications");
 
-        if (goalsBox.getChildren().isEmpty()) {
-            Label savingGoalsLabel = new Label("No saving goal yet");
-            savingGoalsLabel.setId("savingGoalsLabel");
-            savingGoals.getChildren().add(savingGoalsLabel);
+        if (notifications.getChildren().isEmpty()) {
+            Label noNotifications = new Label("No notifications");
+            noNotifications.setId("noNotifications");
+            notifications.getChildren().add(noNotifications);
         }
 
-        savingGoals.getChildren().addAll(savingHeaderLabel, goalsBox);
+        notificationBox.getChildren().addAll(notificationHeader, notifications);
 
-        thirdRow.getChildren().addAll(recentTransaction, savingGoals);
+        thirdRow.getChildren().addAll(recentTransaction, notificationBox);
 
 
         moneyOverview.setPadding(new Insets(10, 10, 10, 10));
@@ -233,7 +236,6 @@ public class DashboardView {
         return root;
     }
 
-    // Method to apply a fade-in animation
     private void applyFadeTransition(Node node, double durationSeconds) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(durationSeconds), node);
         fadeTransition.setFromValue(0);
@@ -241,7 +243,6 @@ public class DashboardView {
         fadeTransition.play();
     }
 
-    // Method to apply a slide-in animation
     private void applyTranslateTransition(Node node, double durationSeconds, double fromX) {
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), node);
         translateTransition.setFromX(fromX);
@@ -249,11 +250,9 @@ public class DashboardView {
         translateTransition.play();
     }
 
-    // Method to animate charts upon logging in or changing the month
     private void animateCharts(VBox... boxes) {
         double durationSeconds = 0.5;
-        double initialOffsetX = 30.0; // Initial offset for slide-in animation
-
+        double initialOffsetX = 30.0;
         for (VBox box : boxes) {
             applyFadeTransition(box, durationSeconds);
             applyTranslateTransition(box, durationSeconds, initialOffsetX);
