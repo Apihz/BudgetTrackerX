@@ -1,0 +1,29 @@
+userId,month,amount,type,category,details,date,tranId
+1,1,100,income,salary,-,2024-1-1,24
+1,1,200,income,salary,-,2024-1-3,24
+1,1,39,expense,food,this week,2024-1-8,24
+1,2,501,income,freelance,salary,2024-2-1,24020174
+1,2,40,income,rental income,salary,2024-2-3,24020365
+2,2,70,expense,groceries,weekly,2024-2-10,24021049
+2,3,150,income,freelance,monthly,2024-3-15,24031532
+3,1,300,income,bonus,quarterly,2024-1-20,24012057
+3,2,25,expense,utilities,monthly,2024-2-15,24021591
+3,3,100,expense,entertainment,monthly,2024-3-12,24031284
+3,2,500,income,salary,this month,2024-1-11,24011196
+3,2,0.50,income,salary,lool,2024-2-1,24020118
+3,2,0.50,savings,dunno,future,2024-2-3,24020373
+3,2,12,expense,food,daily,2024-2-5,24020547
+3,11,1000.0,income,investment,loool,2024-11-13,24111028
+3,12,100,expense,travel,year-end,2024-12-20,24122064
+4,12,250,income,bonus,annual,2024-12-30,24123091
+4,11,120,income,salary,lambat,2024-11-5,24110576
+4,4,75,expense,clothing,seasonal,2024-4-5,24040525
+4,5,200,income,part-time job,weekly,2024-5-10,24051041
+4,5,50,expense,transport,monthly,2024-5-15,24051587
+4,1,49.0,expense,shopping,monthly,2024-01-31,24013197
+4,2,300.0,income,dfafd,dfadff,2024-02-12,24021262
+1,1,43242.0,expense,shopee,adwadad,2024-01-03,24010339
+1,1,2144.0,expense,skoeeke,awddad,2024-01-13,24011399
+1,1,2134,expense,shees,12312,2024-12-12,de2b84f4-07d8-4f87-b1e5-c2e5816973fc
+1,1,100111,income,Other Expenses,BOS BAGI HEHEHEHE,2024-06-10,c2b85609-83ac-40f9-9e4a-3ec778a0cb41
+1,1,89,expense,Education,iuhiu,2024-05-30,4a80e50f-cf9b-4954-878d-218f46c3bc32

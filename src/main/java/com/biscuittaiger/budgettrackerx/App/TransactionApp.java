@@ -3,6 +3,7 @@ package com.biscuittaiger.budgettrackerx.App;
 public class TransactionApp {
 
     private int number;
+    private int id;
     private String userId;
     private String month;
     private double amount;
@@ -12,8 +13,7 @@ public class TransactionApp {
     private String date;
     private String tranId;
 
-    public TransactionApp(int number, String userId, String month, double amount, String type, String category, String details, String date, String tranId) {
-        this.number = number;
+    public TransactionApp(int id, String userId, String month, double amount, String type, String category, String details, String date, String tranId) {
         this.userId = userId;
         this.month = month;
         this.amount = amount;

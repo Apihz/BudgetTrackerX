@@ -29,6 +29,7 @@ public class DashboardApp {
         }
     }
 
+
     public void readInformationFromFile() {
         try (InputStream file = Files.newInputStream(USERS_FILE);
              BufferedReader br = new BufferedReader(new InputStreamReader(file))) {
@@ -53,6 +54,7 @@ public class DashboardApp {
             e.printStackTrace();
         }
     }
+
 
     public double getBalance(int month) {
         return userData.get(month - 1).get(0);

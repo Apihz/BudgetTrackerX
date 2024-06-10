@@ -1,10 +1,12 @@
 package com.biscuittaiger.budgettrackerx.View;
 
 import com.biscuittaiger.budgettrackerx.App.DashboardApp;
+import com.biscuittaiger.budgettrackerx.App.TransactionApp;
 import com.biscuittaiger.budgettrackerx.Model.IconPack;
-import com.biscuittaiger.budgettrackerx.Model.TransactionD;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +17,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -31,9 +39,18 @@ public class DashboardView {
     private int month;
     private DashboardApp dashboard;
     private Label dateTimeLabel;
+    private String userId;
+    private TableView<TransactionApp> transactionTable;
 
-    @SuppressWarnings("unchecked")
+    private VBox balanceBox;
+    private VBox incomeBox;
+    private VBox expenseBox;
+    private VBox budgetBox;
+    private VBox savingsBox;
+
     public VBox DashboardOverview(String userId, String username) {
+        DashboardView dashboardView = this;
+        dashboardView.userId = userId;
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/dashboardX.css").toExternalForm();
         IconPack icon = new IconPack();
 
@@ -47,7 +64,7 @@ public class DashboardView {
         HBox topHeader = new HBox();
         topHeader.setId("topHeader");
         VBox greetings = new VBox();
-        Label headerLabel = new Label("Welcome back "+username+" to Budget Tracker");
+        Label headerLabel = new Label("Welcome back " + username + " to Budget Tracker");
         headerLabel.setId("headerLabel");
         Text headerText = new Text("Track, manage and forecast your budgets and expenditure");
         headerText.setId("headerText");
@@ -79,12 +96,12 @@ public class DashboardView {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        topHeader.getChildren().addAll(greetings,dateTimeLabel);
+        topHeader.getChildren().addAll(greetings, dateTimeLabel);
 
         HBox moneyOverview = new HBox(10);
         moneyOverview.setId("moneyOverview");
 
-        VBox balanceBox = new VBox();
+        balanceBox = new VBox();
         balanceBox.setId("balanceBox");
         Text text1 = new Text("Balance");
         text1.setId("text1");
@@ -94,7 +111,7 @@ public class DashboardView {
         balanceChart.setId("balanceChart");
         balanceBox.getChildren().addAll(text1, balanceText, balanceChart);
 
-        VBox incomeBox = new VBox();
+        incomeBox = new VBox();
         incomeBox.setId("incomeBox");
         Text text2 = new Text("Income");
         text2.setId("text2");
@@ -104,7 +121,7 @@ public class DashboardView {
         incomeChart.setId("incomeChart");
         incomeBox.getChildren().addAll(text2, incomeText, incomeChart);
 
-        VBox expenseBox = new VBox();
+        expenseBox = new VBox();
         expenseBox.setId("expenseBox");
         Text text3 = new Text("Expense");
         text3.setId("text3");
@@ -114,7 +131,7 @@ public class DashboardView {
         expenseChart.setId("expenseChart");
         expenseBox.getChildren().addAll(text3, expenseText, expenseChart);
 
-        VBox budgetBox = new VBox();
+        budgetBox = new VBox();
         budgetBox.setId("budgetBox");
         Text text4 = new Text("Budget");
         text4.setId("text4");
@@ -124,7 +141,7 @@ public class DashboardView {
         budgetChart.setId("budgetChart");
         budgetBox.getChildren().addAll(text4, budgetText, budgetChart);
 
-        VBox savingsBox = new VBox();
+        savingsBox = new VBox();
         savingsBox.setId("savingsBox");
         Text text5 = new Text("Savings");
         text5.setId("text5");
@@ -140,25 +157,25 @@ public class DashboardView {
         VBox recentTransaction = new VBox(20);
         recentTransaction.setId("recentTransaction");
 
-        Label recentTransactionText = new Label("Recent TransactionD");
+        Label recentTransactionText = new Label("Recent Transactions");
         recentTransactionText.setId("recentTransactionText");
 
-        TableView<TransactionD> transactionTable = new TableView<>();
+        transactionTable = new TableView<>();
         transactionTable.setId("transactionTable");
 
-        TableColumn<TransactionD, String> transactionId = new TableColumn<>("ID");
-        transactionId.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
+        TableColumn<TransactionApp, String> transactionId = new TableColumn<>("ID");
+        transactionId.setCellValueFactory(new PropertyValueFactory<>("tranId"));
 
-        TableColumn<TransactionD, String> transactionCol = new TableColumn<>("TransactionD");
-        transactionCol.setCellValueFactory(new PropertyValueFactory<>("transaction"));
+        TableColumn<TransactionApp, String> transactionCol = new TableColumn<>("Transaction");
+        transactionCol.setCellValueFactory(new PropertyValueFactory<>("details"));
 
-        TableColumn<TransactionD, String> amountCol = new TableColumn<>("Amount");
+        TableColumn<TransactionApp, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
 
-        TableColumn<TransactionD, String> dateCol = new TableColumn<>("Date");
+        TableColumn<TransactionApp, String> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        TableColumn<TransactionD, String> categoryCol = new TableColumn<>("Category");
+        TableColumn<TransactionApp, String> categoryCol = new TableColumn<>("Category");
         categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
 
         transactionId.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.05));
@@ -176,43 +193,71 @@ public class DashboardView {
         transactionTable.setPrefWidth(350);
         transactionTable.setMaxHeight(375);
 
-        transactionTable.getColumns().addAll(transactionId,transactionCol, amountCol, dateCol, categoryCol);
+        transactionTable.getColumns().addAll(transactionId, transactionCol, amountCol, dateCol, categoryCol);
 
-        ObservableList<TransactionD> data = FXCollections.observableArrayList();
-        String[] testTransItem = {"1" ,"Beli shopii", "RM70", "13/2/17", "Shopping"};
-        for (int i = 0; i < 5; i++) {
-            data.add(new TransactionD(testTransItem[0], testTransItem[1], testTransItem[2], testTransItem[3], testTransItem[4]));
-        }
+        ObservableList<TransactionApp> data = getTransactionsFromFile(userId, String.valueOf(month));
         transactionTable.setItems(data);
+
 
         recentTransaction.getChildren().addAll(recentTransactionText, transactionTable);
 
+        updateTransactions(userId, transactionTable);
+
         VBox savingGoals = new VBox();
         savingGoals.setId("savingGoals");
-        Label savingHeaderLabel = new Label("Saving Goals");savingHeaderLabel.setId("savingHeaderLabel");
+        Label savingHeaderLabel = new Label("Saving Goals");
+        savingHeaderLabel.setId("savingHeaderLabel");
         VBox goalsBox = new VBox();
         goalsBox.setId("goalsBox");
 
         if (goalsBox.getChildren().isEmpty()) {
-            Label savingGoalsLabel = new Label("No saving goal yet");savingGoalsLabel.setId("savingGoalsLabel");
+            Label savingGoalsLabel = new Label("No saving goal yet");
+            savingGoalsLabel.setId("savingGoalsLabel");
             savingGoals.getChildren().add(savingGoalsLabel);
         }
 
-        savingGoals.getChildren().addAll(savingHeaderLabel,goalsBox);
+        savingGoals.getChildren().addAll(savingHeaderLabel, goalsBox);
 
-        thirdRow.getChildren().addAll(recentTransaction,savingGoals);
+        thirdRow.getChildren().addAll(recentTransaction, savingGoals);
+
 
         moneyOverview.setPadding(new Insets(10, 10, 10, 10));
         moneyOverview.getChildren().addAll(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox);
-        VBox.setMargin(menuPane, new Insets(20, 0, -50, 15));
-        for (Node box : Arrays.asList(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox,savingsBox)) {
-            VBox.setVgrow(box, Priority.ALWAYS);
-            HBox.setHgrow(box, Priority.ALWAYS);
-        }
 
-        root.getChildren().addAll(topHeader,menuPane, moneyOverview, thirdRow);
+        VBox.setMargin(menuPane, new Insets(20, 0, -50, 15));
+
+        animateCharts(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox);
+
+        root.getChildren().addAll(topHeader, menuPane, moneyOverview, thirdRow);
 
         return root;
+    }
+
+    // Method to apply a fade-in animation
+    private void applyFadeTransition(Node node, double durationSeconds) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(durationSeconds), node);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+        fadeTransition.play();
+    }
+
+    // Method to apply a slide-in animation
+    private void applyTranslateTransition(Node node, double durationSeconds, double fromX) {
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), node);
+        translateTransition.setFromX(fromX);
+        translateTransition.setToX(0);
+        translateTransition.play();
+    }
+
+    // Method to animate charts upon logging in or changing the month
+    private void animateCharts(VBox... boxes) {
+        double durationSeconds = 0.5;
+        double initialOffsetX = 30.0; // Initial offset for slide-in animation
+
+        for (VBox box : boxes) {
+            applyFadeTransition(box, durationSeconds);
+            applyTranslateTransition(box, durationSeconds, initialOffsetX);
+        }
     }
 
     private void updateDisplayedInformation() {
@@ -221,7 +266,12 @@ public class DashboardView {
         expenseText.setText("RM " + dashboard.getExpense(month));
         budgetText.setText("RM " + dashboard.getBudget(month));
         savingsText.setText("RM " + dashboard.getSavings(month));
+
+        updateTransactions(userId, transactionTable);
+        animateCharts(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox); // Apply animations
+
     }
+
     private void updateDateTime() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE hh:mm:ss a");
@@ -229,6 +279,38 @@ public class DashboardView {
         formattedDateTime = formattedDateTime.toUpperCase();
         dateTimeLabel.setText(formattedDateTime);
     }
+    private void updateTransactions(String userId, TableView<TransactionApp> transactionTable) {
+        ObservableList<TransactionApp> data = getTransactionsFromFile(userId, String.valueOf(month));
+        transactionTable.setItems(data);
+    }
+
+    private ObservableList<TransactionApp> getTransactionsFromFile(String userId, String month) {
+        ObservableList<TransactionApp> transactions = FXCollections.observableArrayList();
+        String fileName = "src/main/java/com/biscuittaiger/budgettrackerx/View/TransactionTEST.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line = br.readLine(); // Skip the header
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields[0].equals(userId) && fields[1].equals(month) && fields[3].equals("expense")) {
+                    String id = fields[0];
+                    double amount = Double.parseDouble(fields[2]);
+                    String type = fields[3];
+                    String category = fields[4];
+                    String details = fields[5];
+                    String date = fields[6];
+                    String tranId = fields[7];
+
+                    TransactionApp transaction = new TransactionApp(Integer.parseInt(id), userId, month, amount, type, category, details, date, tranId);
+                    transactions.add(transaction);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }
+
 
 
 }

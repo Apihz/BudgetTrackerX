@@ -72,9 +72,6 @@ public class MainAppView extends Application {
         VBox.setVgrow(rightBar, Priority.ALWAYS);
         rightBar.minWidthProperty().bind(root.widthProperty().multiply(0.8)); // 80% width
 
-
-
-
         root.getChildren().addAll(leftBar, rightBar);
         HBox.setHgrow(rightBar, Priority.ALWAYS);
 

@@ -1,6 +1,5 @@
 package com.biscuittaiger.budgettrackerx.View;
 
-
 import com.biscuittaiger.budgettrackerx.App.TransactionApp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.util.*;
 
 public class TransactionView {
@@ -32,7 +32,7 @@ public class TransactionView {
     private ComboBox<String> monthComboBox;
     private final String username;
     private final ArrayList<TransactionApp> transactionApps;
-    private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/View/TransactioninfoTEST.txt";
+    private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/View/TransactionTEST.txt";
 
     public TransactionView(String username) {
         this.username = username;
@@ -46,9 +46,9 @@ public class TransactionView {
         transactionView.setPadding(new Insets(10));
 
         monthComboBox = new ComboBox<>();
-        List<String> months = Arrays.asList("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC");
+        List<String> months = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
         monthComboBox.getItems().addAll(months);
-        monthComboBox.setValue("JAN");
+        monthComboBox.setValue("1");
 
         monthComboBox.setOnAction(event -> fetchAndDisplayTransactions(username, monthComboBox.getValue()));
 
@@ -113,12 +113,12 @@ public class TransactionView {
         TableColumn<TransactionApp, String> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        TableColumn<TransactionApp, String> tranIdCol = new TableColumn<>("TransactionApp ID");
+        TableColumn<TransactionApp, String> tranIdCol = new TableColumn<>("Transaction ID");
         tranIdCol.setCellValueFactory(new PropertyValueFactory<>("tranId"));
 
         transactionTable.getColumns().addAll(numberCol, categoryCol, detailsCol, amountCol, dateCol, tranIdCol);
 
-        transactionTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); //Enable row selection
+        transactionTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // Enable row selection
 
         transactionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -232,397 +232,238 @@ public class TransactionView {
             while (readFile.hasNext()) {
                 String line = readFile.nextLine();
                 String[] delimiter = line.split(",");
-                if (inputUsrnm.equals(delimiter[0])) {
-                    return delimiter[1];
+                String userId = delimiter[0];
+                String username = delimiter[1];
+                String password = delimiter[2];
+
+                if (username.equals(inputUsrnm)) {
+                    return userId;
                 }
             }
         } finally {
             readFile.close();
         }
-        return inputUsrnm + " not found";
+
+        return "User not found";
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAddTransactionDialog() {
+        Stage dialog = new Stage();
+        dialog.setTitle("Add TransactionApp");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+
+        TextField amountField = new TextField();
+        ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList("income", "expense", "savings"));
+        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Shopping", "Transportation", "Other Expenses"));
+        TextField categoryDisplayField = new TextField();
+        categoryDisplayField.setEditable(false);
+        categoryDisplayField.setVisible(false); // Initially hidden
+        TextField detailsField = new TextField();
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+
+        grid.add(new Label("Amount:"), 0, 0);
+        grid.add(amountField, 1, 0);
+        grid.add(new Label("Type:"), 0, 1);
+        grid.add(typeComboBox, 1, 1);
+        grid.add(new Label("Category:"), 0, 2);
+        grid.add(categoryComboBox, 1, 2);
+        grid.add(categoryDisplayField, 1, 2); // Add category display field to the same position
+        grid.add(new Label("Details:"), 0, 3);
+        grid.add(detailsField, 1, 3);
+        grid.add(new Label("Date:"), 0, 4);
+        grid.add(datePicker, 1, 4);
+
+        typeComboBox.setOnAction(event -> {
+            String selectedType = typeComboBox.getValue();
+            if (selectedType.equals("expense")) {
+                categoryComboBox.setVisible(true);
+                categoryDisplayField.setVisible(false);
+            } else {
+                categoryComboBox.setVisible(false);
+                categoryDisplayField.setVisible(true);
+                categoryDisplayField.setText(selectedType);
+            }
+        });
+
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(event -> {
+            try {
+                String amount = amountField.getText();
+                String type = typeComboBox.getValue();
+                String category = type.equals("expense") ? categoryComboBox.getValue() : type;
+                String details = detailsField.getText();
+                LocalDate date = datePicker.getValue();
+
+                if (amount.isEmpty() || type.isEmpty() || (type.equals("expense") && (category == null || category.isEmpty())) || details.isEmpty() || date == null) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all fields");
+                    return;
+                }
+
+                String userId = readUserAuthFile(username);
+                String month = monthComboBox.getValue();
+
+                writeTransactionToFile(userId, month, amount, type, category, details, date.toString());
+                fetchAndDisplayTransactions(username, month);
+
+                dialog.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(event -> dialog.close());
+
+        HBox buttonBox = new HBox(10, saveButton, cancelButton);
+        grid.add(buttonBox, 1, 5);
+
+        Scene scene = new Scene(grid, 400, 250);
+        dialog.setScene(scene);
+        dialog.showAndWait();
+    }
+
+
+
+    private void editSelectedTransaction() {
+        TransactionApp selectedTransaction = transactionTable.getSelectionModel().getSelectedItem();
+        if (selectedTransaction == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "No transaction selected");
+            return;
+        }
+
+        showEditTransactionDialog(selectedTransaction);
+    }
+
+    private void showEditTransactionDialog(TransactionApp transactionApp) {
+        Stage dialog = new Stage();
+        dialog.setTitle("Edit TransactionApp");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+
+        TextField amountField = new TextField(String.valueOf(transactionApp.getAmount()));
+        ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList("income", "expense", "savings"));
+        typeComboBox.setValue(transactionApp.getType());
+        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Shopping", "Transportation", "Other Expenses"));
+        categoryComboBox.setValue(transactionApp.getCategory());
+        TextField detailsField = new TextField(transactionApp.getDetails());
+        DatePicker datePicker = new DatePicker(LocalDate.parse(transactionApp.getDate()));
+
+        grid.add(new Label("Amount:"), 0, 0);
+        grid.add(amountField, 1, 0);
+        grid.add(new Label("Type:"), 0, 1);
+        grid.add(typeComboBox, 1, 1);
+        grid.add(new Label("Category:"), 0, 2);
+        grid.add(categoryComboBox, 1, 2);
+        grid.add(new Label("Details:"), 0, 3);
+        grid.add(detailsField, 1, 3);
+        grid.add(new Label("Date:"), 0, 4);
+        grid.add(datePicker, 1, 4);
+
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(event -> {
+            try {
+                double amount = Double.parseDouble(amountField.getText());
+                String type = typeComboBox.getValue();
+                String category = categoryComboBox.getValue();
+                String details = detailsField.getText();
+                LocalDate date = datePicker.getValue();
+
+                transactionApp.setAmount(amount);
+                transactionApp.setType(type);
+                transactionApp.setCategory(category);
+                transactionApp.setDetails(details);
+                transactionApp.setDate(date.toString());
+
+                updateTransactionFile(transactionApp);
+                fetchAndDisplayTransactions(username, monthComboBox.getValue());
+
+                dialog.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(event -> dialog.close());
+
+        HBox buttonBox = new HBox(10, saveButton, cancelButton);
+        grid.add(buttonBox, 1, 5);
+
+        Scene scene = new Scene(grid, 400, 250);
+        dialog.setScene(scene);
+        dialog.showAndWait();
+    }
+
+    private void deleteSelectedTransaction() {
+        TransactionApp selectedTransaction = transactionTable.getSelectionModel().getSelectedItem();
+        if (selectedTransaction == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "No transaction selected");
+            return;
+        }
+
+        try {
+            deleteTransactionFromFile(selectedTransaction);
+            fetchAndDisplayTransactions(username, monthComboBox.getValue());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeTransactionToFile(String userId, String month, String amount, String type, String category, String details, String date) throws IOException {
+        String transactionId = UUID.randomUUID().toString();
+
+        String transaction = userId + "," + month + "," + amount + "," + type + "," + category + "," + details + "," + date + "," + transactionId + "\n";
+
+        Files.write(Paths.get(TRANS_FILE), transaction.getBytes(), StandardOpenOption.APPEND);
+    }
+
+    private void updateTransactionFile(TransactionApp transactionApp) throws IOException {
+        Path path = Paths.get(TRANS_FILE);
+        List<String> lines = Files.readAllLines(path);
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            for (String line : lines) {
+                String[] delimiter = line.split(",");
+                if (delimiter[7].equals(transactionApp.getTranId())) {
+                    String updatedTransaction = transactionApp.getUserId() + "," + transactionApp.getMonth() + "," + transactionApp.getAmount() + "," + transactionApp.getType() + "," + transactionApp.getCategory() + "," + transactionApp.getDetails() + "," + transactionApp.getDate() + "," + transactionApp.getTranId();
+                    writer.write(updatedTransaction);
+                } else {
+                    writer.write(line);
+                }
+                writer.newLine();
+            }
+        }
+    }
+
+    private void deleteTransactionFromFile(TransactionApp transactionApp) throws IOException {
+        Path path = Paths.get(TRANS_FILE);
+        List<String> lines = Files.readAllLines(path);
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            for (String line : lines) {
+                String[] delimiter = line.split(",");
+                if (!delimiter[7].equals(transactionApp.getTranId())) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
-        alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    //--------------------------------------- FOR THE ADD BUTTON  FUNCTION-----------------------------------//
-    private void showAddTransactionDialog() {
-        String userId;
-        try {
-            userId = readUserAuthFile(username);
-        } catch (FileNotFoundException e) {
-            showAlert("Error", "User authentication file not found");
-            return;
-        }
-
-        // Create a new stage for the pop-up dialog
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("Add TransactionApp");
-
-        // Create the form fields
-        TextField amountField = new TextField();
-        TextField monthField = new TextField();
-        TextField dayField = new TextField();
-        TextField categoryField = new TextField();
-        TextField detailsField = new TextField();
-
-        ComboBox<String> typeComboBox = new ComboBox<>();
-        typeComboBox.getItems().addAll("income", "expense", "savings");
-        typeComboBox.setValue("expense"); // Set default value
-
-        Button addButton = new Button("Add");
-        Button cancelButton = new Button("Cancel");
-
-        // Layout the form
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setVgap(10);
-        grid.setHgap(10);
-
-        grid.add(new Label("Amount:"), 0, 0);
-        grid.add(amountField, 1, 0);
-        grid.add(new Label("Month (JAN-DEC):"), 0, 1);
-        grid.add(monthField, 1, 1);
-        grid.add(new Label("Day:"), 0, 2);
-        grid.add(dayField, 1, 2);
-        grid.add(new Label("Category:"), 0, 3);
-        grid.add(categoryField, 1, 3);
-        grid.add(new Label("Details:"), 0, 4);
-        grid.add(detailsField, 1, 4);
-        grid.add(new Label("Type:"), 0, 5);
-        grid.add(typeComboBox, 1, 5);
-        grid.add(addButton, 0, 6);
-        grid.add(cancelButton, 1, 6);
-
-        Scene dialogScene = new Scene(grid, 400, 300);
-        dialogStage.setScene(dialogScene);
-
-        addButton.setOnAction(e -> {
-            try {
-
-                double amount = Double.parseDouble(amountField.getText());
-                String month = monthField.getText().toUpperCase();
-                int day = Integer.parseInt(dayField.getText());
-                String category = categoryField.getText();
-                String details = detailsField.getText();
-                String type = typeComboBox.getValue();
-
-                if (!isValidDate(month, day)) {
-                    showAlert("Invalid Date", "Please enter a valid date.");
-                    return;
-                }
-
-                String transactionId = generateTransactionId(month, day);
-                TransactionApp newTransactionApp = new TransactionApp(transactionApps.size() + 1, userId, month, amount, type, category, details, "2024-" + getMonthNumber(month) + "-" + String.format("%02d", day), transactionId);
-                transactionApps.add(newTransactionApp);
-                appendTransactionToFile(newTransactionApp);
-
-                // Refresh the table view
-                transactionTable.getItems().setAll(transactionApps);
-                dialogStage.close();
-            } catch (NumberFormatException ex) {
-                showAlert("Invalid Input", "Please enter valid numbers for amount and day.");
-            }
-        });
-
-        cancelButton.setOnAction(e -> dialogStage.close());
-
-        dialogStage.showAndWait();
-    }
-
-    private boolean isValidDate(String month, int day) {
-        int maxDays = getDaysInMonth(month);
-        return day > 0 && day <= maxDays;
-    }
-
-    private int getDaysInMonth(String month) {
-        switch (month) {
-            case "JAN":
-            case "MAR":
-            case "MAY":
-            case "JUL":
-            case "AUG":
-            case "OCT":
-            case "DEC":
-                return 31;
-            case "APR":
-            case "JUN":
-            case "SEP":
-            case "NOV":
-                return 30;
-            case "FEB":
-                return 29; // 2024 is a leap year
-            default:
-                return 0;
-        }
-    }
-
-    private String generateTransactionId(String month, int day) {
-        int randomNum = (int) (Math.random() * 100); // Generate a random two-digit number
-        String formattedDay = String.format("%02d", day);
-        String formattedRandomNum = String.format("%02d", randomNum);
-        return "24" + getMonthNumber(month) + formattedDay + formattedRandomNum;
-    }
-
     private String getMonthNumber(String month) {
-        switch (month) {
-            case "JAN":
-                return "01";
-            case "FEB":
-                return "02";
-            case "MAR":
-                return "03";
-            case "APR":
-                return "04";
-            case "MAY":
-                return "05";
-            case "JUN":
-                return "06";
-            case "JUL":
-                return "07";
-            case "AUG":
-                return "08";
-            case "SEP":
-                return "09";
-            case "OCT":
-                return "10";
-            case "NOV":
-                return "11";
-            case "DEC":
-                return "12";
-            default:
-                return "00";
-        }
+        int monthInt = Integer.parseInt(month);
+        return String.format("%02d", monthInt);
     }
-
-    private void appendTransactionToFile(TransactionApp transactionApp) {
-        String filePath = TRANS_FILE;
-        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            String transactionString = String.join(",",
-                    transactionApp.getUserId(),
-                    transactionApp.getMonth(),
-                    String.valueOf(transactionApp.getAmount()),
-                    transactionApp.getType(),
-                    transactionApp.getCategory(),
-                    transactionApp.getDetails(),
-                    transactionApp.getDate(),
-                    transactionApp.getTranId()
-            );
-            writer.write(transactionString);
-            writer.newLine();
-        } catch (IOException e) {
-            showAlert("File Error", "An error occurred while writing to the file.");
-        }
-    }
-
-    //-------------------------------------------------------------------------------------------------------//
-    //--------------------------------------- FOR THE DELETE BUTTON  FUNCTION--------------------------------//
-    private void deleteSelectedTransaction() {
-        TransactionApp selectedTransactionApp = transactionTable.getSelectionModel().getSelectedItem();
-        if (selectedTransactionApp == null) {
-            showAlert("Error", "Please select a transaction to delete.");
-            return;
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete TransactionApp");
-        alert.setHeaderText("Confirm Deletion");
-        alert.setContentText("Are you sure you want to delete this transaction?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Delete from UI
-            transactionApps.remove(selectedTransactionApp);
-            transactionTable.getItems().setAll(transactionApps);
-
-            // Delete from file
-            deleteTransactionFromFile(selectedTransactionApp);
-        }
-    }
-
-    private void deleteTransactionFromFile(TransactionApp transactionAppToDelete) {
-        String filePath = TRANS_FILE;
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
-            List<String> updatedLines = new ArrayList<>();
-            for (String line : lines) {
-                String[] parts = line.split(",");
-                if (!parts[7].equals(transactionAppToDelete.getTranId())) {
-                    updatedLines.add(line);
-                }
-            }
-            Files.write(Paths.get(filePath), updatedLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            showAlert("Error", "An error occurred while deleting the transaction from the file.");
-        }
-    }
-
-    //-------------------------------------------------------------------------------------------------------//
-    //--------------------------------------- FOR THE EDIT BUTTON  FUNCTION----------------------------------//
-    private void editSelectedTransaction() {
-        TransactionApp selectedTransactionApp = transactionTable.getSelectionModel().getSelectedItem();
-        if (selectedTransactionApp == null) {
-            showAlert("Error", "Please select a transaction to edit.");
-            return;
-        }
-
-        // Read userId and transactionId
-//        String userId = selectedTransactionApp.getUserId();
-//        String transactionId = selectedTransactionApp.getTranId();
-        // Show edit dialog and get the updated transaction
-        TransactionApp updatedTransactionApp = showEditTransactionDialog(selectedTransactionApp);
-        if (updatedTransactionApp == null) {
-            // Edit was cancelled
-            return;
-        }
-
-        // Update transaction in file
-        updateTransactionInFile(selectedTransactionApp.getUserId(), selectedTransactionApp.getTranId(), updatedTransactionApp);
-
-    }
-
-    private TransactionApp showEditTransactionDialog(TransactionApp transactionApp) {
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("Edit TransactionApp");
-
-        TextField amountField = new TextField(String.valueOf(transactionApp.getAmount()));
-        TextField monthField = new TextField(transactionApp.getMonth());
-        TextField dayField = new TextField(transactionApp.getDate().split("-")[2]);
-        TextField categoryField = new TextField(transactionApp.getCategory());
-        TextField detailsField = new TextField(transactionApp.getDetails());
-
-        ComboBox<String> typeComboBox = new ComboBox<>();
-        typeComboBox.getItems().addAll("income", "expense", "savings");
-        typeComboBox.setValue(transactionApp.getType());
-
-        Button editButton = new Button("Edit");
-        Button cancelButton = new Button("Cancel");
-
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setVgap(10);
-        grid.setHgap(10);
-
-        grid.add(new Label("Amount:"), 0, 0);
-        grid.add(amountField, 1, 0);
-        grid.add(new Label("Month (JAN-DEC):"), 0, 1);
-        grid.add(monthField, 1, 1);
-        grid.add(new Label("Day:"), 0, 2);
-        grid.add(dayField, 1, 2);
-        grid.add(new Label("Category:"), 0, 3);
-        grid.add(categoryField, 1, 3);
-        grid.add(new Label("Details:"), 0, 4);
-        grid.add(detailsField, 1, 4);
-        grid.add(new Label("Type:"), 0, 5);
-        grid.add(typeComboBox, 1, 5);
-        grid.add(editButton, 0, 6);
-        grid.add(cancelButton, 1, 6);
-
-        Scene dialogScene = new Scene(grid, 400, 300);
-        dialogStage.setScene(dialogScene);
-
-        editButton.setOnAction(e -> {
-            try {
-                double amount = Double.parseDouble(amountField.getText());
-                String month = monthField.getText().toUpperCase();
-                int day = Integer.parseInt(dayField.getText());
-                String category = categoryField.getText();
-                String details = detailsField.getText();
-                String type = typeComboBox.getValue();
-
-                if (!isValidDate(month, day)) {
-                    showAlert("Invalid Date", "Please enter a valid date.");
-                    return;
-                }
-
-                TransactionApp updatedTransactionApp = new TransactionApp(
-                        transactionApp.getNumber(),
-                        transactionApp.getUserId(),
-                        month,
-                        amount,
-                        type,
-                        category,
-                        details,
-                        "2024-" + getMonthNumber(month) + "-" + String.format("%02d", day),
-                        transactionApp.getTranId()
-                );
-
-                dialogStage.close();
-                handleEditTransaction(updatedTransactionApp);
-            } catch (NumberFormatException ex) {
-                showAlert("Invalid Input", "Please enter valid numbers for amount and day.");
-            }
-        });
-
-        cancelButton.setOnAction(e -> dialogStage.close());
-
-        dialogStage.showAndWait();
-        return null;
-    }
-
-    private void updateTransactionInFile(String userId, String transactionId, TransactionApp updatedTransactionApp) {
-        String filePath = TRANS_FILE;
-        File file = new File(filePath);
-        List<String> lines = new ArrayList<>();
-
-        try ( Scanner scanner = new Scanner(file)) {
-            // Read all lines from the file
-            while (scanner.hasNextLine()) {
-                lines.add(scanner.nextLine());
-            }
-        } catch (IOException e) {
-            showAlert("Error", "Failed to read from file.");
-            return;
-        }
-
-        // Iterate over the lines and update the matching transaction
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            String[] parts = line.split(",");
-            if (parts.length == 8 && parts[0].equals(userId) && parts[7].equals(transactionId)) {
-                // Found the matching transaction, update the line
-                String updatedLine = String.join(",",
-                        updatedTransactionApp.getUserId(),
-                        updatedTransactionApp.getMonth(),
-                        String.valueOf(updatedTransactionApp.getAmount()),
-                        updatedTransactionApp.getType(),
-                        updatedTransactionApp.getCategory(),
-                        updatedTransactionApp.getDetails(),
-                        updatedTransactionApp.getDate(),
-                        updatedTransactionApp.getTranId());
-                lines.set(i, updatedLine);
-                break; // Stop searching
-            }
-        }
-        // Write the updated lines back to the file
-        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String line : lines) {
-                writer.write(line);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            showAlert("Error", "Failed to write to file.");
-        }
-    }
-
-    private void handleEditTransaction(TransactionApp updatedTransactionApp) {
-        // Update transaction in file
-        updateTransactionInFile(updatedTransactionApp.getUserId(), updatedTransactionApp.getTranId(), updatedTransactionApp);
-
-        // Update transaction in the UI
-        for (int i = 0; i < transactionApps.size(); i++) {
-            if (transactionApps.get(i).getTranId().equals(updatedTransactionApp.getTranId())) {
-                transactionApps.set(i, updatedTransactionApp);
-                break;
-            }
-        }
-        // Refresh the table view
-        transactionTable.getItems().setAll(transactionApps);
-    }
-    //-------------------------------------------------------------------------------------------------------//
 }

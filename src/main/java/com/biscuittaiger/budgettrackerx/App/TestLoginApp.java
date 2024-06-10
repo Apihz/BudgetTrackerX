@@ -33,8 +33,6 @@ public class TestLoginApp extends Application {
             for (String user : users) {
                 String[] parts = user.split(",");
                 if (parts.length == 3 && parts[1].equals(username) && parts[2].equals(password)) {
-                    showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
-
                     showMainApp(primaryStage, parts[0], username); // parts[0] is the user ID
                     return;
                 }
