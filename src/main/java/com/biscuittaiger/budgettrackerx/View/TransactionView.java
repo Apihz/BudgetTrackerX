@@ -101,8 +101,6 @@ public class TransactionView {
     }
 
     private void setupTransactionView() {
-        TableColumn<TransactionApp, Integer> numberCol = new TableColumn<>("No");
-        numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
 
         TableColumn<TransactionApp, String> categoryCol = new TableColumn<>("Category");
         categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -119,7 +117,7 @@ public class TransactionView {
         TableColumn<TransactionApp, String> tranIdCol = new TableColumn<>("Transaction ID");
         tranIdCol.setCellValueFactory(new PropertyValueFactory<>("tranId"));
 
-        transactionTable.getColumns().addAll(numberCol, categoryCol, detailsCol, amountCol, dateCol, tranIdCol);
+        transactionTable.getColumns().addAll( categoryCol, detailsCol, amountCol, dateCol, tranIdCol);
 
         transactionTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // Enable row selection
 
@@ -384,12 +382,20 @@ public class TransactionView {
             showAlert(Alert.AlertType.ERROR, "Error", "No transaction selected");
             return;
         }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Transaction");
+        alert.setHeaderText("Confirm Deletion");
+        alert.setContentText("Are you sure you want to delete this transaction?");
 
-        try {
-            deleteTransactionFromFile(selectedTransaction);
-            fetchAndDisplayTransactions(userId, monthComboBox.getValue());
-        } catch (IOException e) {
-            e.printStackTrace();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                deleteTransactionFromFile(selectedTransaction);
+                fetchAndDisplayTransactions(userId, monthComboBox.getValue());
+                calculateAndUpdateBudgetInfo(userId,Integer.parseInt(monthComboBox.getValue()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -455,10 +461,10 @@ public class TransactionView {
                     // Check if this is the line to edit
                     if (userId.equals(parts[0]) && String.valueOf(month).equals(parts[1])) {
                         // Update the values
-                        parts[2] = String.valueOf(updatedIncome);  // Update income
-                        parts[3] = String.valueOf(updatedExpense); // Update expense
-                        parts[4] = String.valueOf(updatedBalance); // Update balance
-                        parts[5] = String.valueOf(updatedSavings); // Update savings
+                        parts[2] = String.valueOf(updatedBalance);
+                        parts[3] = String.valueOf(updatedIncome);
+                        parts[4] = String.valueOf(updatedExpense);
+                        parts[6] = String.valueOf(updatedSavings);
                     }
                 }
                 // Reconstruct the line
@@ -518,10 +524,5 @@ public class TransactionView {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private String getMonthNumber(String month) {
-        int monthInt = Integer.parseInt(month);
-        return String.format("%02d", monthInt);
     }
 }
