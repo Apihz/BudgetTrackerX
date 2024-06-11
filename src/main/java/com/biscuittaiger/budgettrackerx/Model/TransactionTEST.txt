@@ -17,10 +17,10 @@ userId,month,amount,type,category,details,date,tranId
 4,5,50,expense,transport,monthly,2024-5-15,24051587
 4,1,49.0,expense,shopping,monthly,2024-01-31,24013197
 4,2,300.0,income,dfafd,dfadff,2024-02-12,24021262
-1,1,43242.0,expense,shopee,adwadad,2024-01-03,24010339
 1,1,2144.0,expense,skoeeke,awddad,2024-01-13,24011399
 2,6,999.00,expense,shopping,dwd,2024-06-11,dwd
 2,1,1000,income,income,gaji,2024-06-11,0c17ef16-0654-4436-9f02-94118f7bbd61
 2,1,10,income,income,2,2024-06-11,1290c8a0-2324-4ff9-8884-36fe512aeab0
 1,1,100,savings,savings,dw,2024-06-11,cc835bd7-d339-475b-b20d-df2b5a46f046
-1,1,45,expense,Education,pen,2024-01-17,e2900afe-4da7-4f91-adcf-10ae68701024
+1,1,90.0,expense,Education,pen,2024-01-17,e2900afe-4da7-4f91-adcf-10ae68701024
+1,1,10000,income,income,Gaji,2024-01-26,d95776c0-cde5-4e24-bf5f-e8c142bb56a3

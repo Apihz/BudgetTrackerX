@@ -157,7 +157,7 @@ public class BudgetView {
 
         feedbackLabel.setText("Budget added & updated successfully!");
         displayBudgetStatus();
-        double totalBudgetMonthly = calculateTotalBudgetForMonth(monthInt);
+        double totalBudgetMonthly = calculateTotalBudgetForMonth(userId,monthInt);
         // Clear input fields
         amountField.clear();
         updateDashboardBudgetInfo(userId, monthInt, totalBudgetMonthly);
@@ -311,10 +311,10 @@ public class BudgetView {
 
     }
 
-    private double calculateTotalBudgetForMonth(int month) {
+    private double calculateTotalBudgetForMonth(String userId, int month) {
         double totalBudget = 0;
         for (BudgetApp budgetItem : budgetList) {
-            if (budgetItem.getMonth() == month) {
+            if (budgetItem.getMonth() == month && budgetItem.getUserId().equals(userId) ) {
                 totalBudget += budgetItem.getBudgetAmount();
             }
         }

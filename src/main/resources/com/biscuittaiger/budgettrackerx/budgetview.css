@@ -1,6 +1,7 @@
 .root{
     -fx-fill: white;
     -fx-text-fill: white;
+
 }
 #monthSelection{
      -fx-base:#252728;
