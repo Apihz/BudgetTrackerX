@@ -506,7 +506,7 @@ public class TransactionView {
                     totalIncome += amount;
                 } else if (type.equals("expense")) {
                     totalExpense += amount;
-                } else if (type.equals("savings")) {
+                } else if (type.equals("savingss")) {
                     totalSavings += amount;
                 }
 
