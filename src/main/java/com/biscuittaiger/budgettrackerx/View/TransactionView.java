@@ -264,22 +264,32 @@ public class TransactionView {
         grid.add(detailsField, 1, 3);
         grid.add(new Label("Date:"), 0, 4);
         grid.add(datePicker, 1, 4);
-        typeComboBox.getSelectionModel().selectFirst();
-        typeComboBox.setOnAction(event -> {
-            String selectedType = typeComboBox.getValue();
-            typeComboBox.getSelectionModel().selectFirst();
-            if (selectedType != null && selectedType.equals("expense")) {
+
+        typeComboBox.getSelectionModel().selectFirst(); // Set the default selection to the first item
+        String selectedType = typeComboBox.getValue();
+        if (selectedType != null && selectedType.equals("expense")) {
+            categoryComboBox.setVisible(true);
+            categoryDisplayField.setVisible(false);
+        } else {
+            categoryComboBox.setVisible(false);
+            categoryDisplayField.setVisible(true);
+            categoryDisplayField.setText(selectedType);
+        }
+
+        typeComboBox.setOnAction(e -> {
+            String selectedType2 = typeComboBox.getValue();
+            if (selectedType2 != null && selectedType2.equals("expense")) {
                 categoryComboBox.setVisible(true);
                 categoryDisplayField.setVisible(false);
             } else {
                 categoryComboBox.setVisible(false);
                 categoryDisplayField.setVisible(true);
-                categoryDisplayField.setText(selectedType);
+                categoryDisplayField.setText(selectedType2);
             }
         });
 
         Button saveButton = new Button("Save");
-        saveButton.setOnAction(event -> {
+        saveButton.setOnAction(e -> {
             try {
                 String amount = amountField.getText();
                 String type = typeComboBox.getValue();
@@ -298,14 +308,13 @@ public class TransactionView {
                 fetchAndDisplayTransactions(userId, month);
                 calculateAndUpdateBudgetInfo(userId, Integer.parseInt(month));
                 dialog.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         });
 
-
         Button cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(event -> dialog.close());
+        cancelButton.setOnAction(e -> dialog.close());
 
         HBox buttonBox = new HBox(10, saveButton, cancelButton);
         grid.add(buttonBox, 1, 5);
@@ -314,6 +323,7 @@ public class TransactionView {
         dialog.setScene(scene);
         dialog.showAndWait();
     }
+
 
 
 
@@ -388,6 +398,15 @@ public class TransactionView {
         Scene scene = new Scene(grid, 400, 250);
         dialog.setScene(scene);
         dialog.showAndWait();
+    }
+    private void restrictDatePickerToMonth(DatePicker datePicker, int month) {
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.getMonthValue() != month);
+            }
+        });
     }
 
     private void deleteSelectedTransaction() {

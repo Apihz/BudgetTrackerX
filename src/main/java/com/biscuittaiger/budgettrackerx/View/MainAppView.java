@@ -1,5 +1,6 @@
 package com.biscuittaiger.budgettrackerx.View;
 
+import com.biscuittaiger.budgettrackerx.App.AnalysisApp;
 import com.biscuittaiger.budgettrackerx.Model.FontPack;
 import com.biscuittaiger.budgettrackerx.Model.IconPack;
 import javafx.application.Application;
@@ -42,7 +43,7 @@ private  String username = " weewewe";
         DashboardView dashboardView = new DashboardView();
         TransactionView transactionView = new TransactionView(userId);
         BudgetView budgetView = new BudgetView();
-        AnalysisView analysisView = new AnalysisView();
+        AnalysisApp analysisApp = new AnalysisApp();
 
         rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));//initialized dashboardView upon successful login
         Button button1 = new Button("Dashboard");
@@ -64,7 +65,7 @@ private  String username = " weewewe";
         button3.setGraphic(icon.getAnalyticsIcon());
         button3.setOnAction(e -> {
             rightBar.getChildren().clear();
-            rightBar.getChildren().add(analysisView.ExpenseAnalysisApp(userId));
+            rightBar.getChildren().add(analysisApp.ExpenseAnalysisApp(userId));
         });
         Button button4 = new Button("Budget Planning");
         button4.setId("button4");

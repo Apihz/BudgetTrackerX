@@ -32,3 +32,11 @@ userId,month,amount,type,category,details,date,tranId
 1,1,23,expense,Shopping,12,2024-06-12,625
 1,1,3,income,income,33,2024-06-12,765
 1,2,90,income,income,A,2024-06-12,308
+1,2,231,income,income,323,2024-06-12,489
+1,2,3213,income,income,3213,2024-06-12,867
+1,2,21343,income,income,23,2024-06-12,573
+1,1,99,income,income,9,2024-06-12,534
+1,1,211,expense,Education,e,2024-06-12,235
+1,1,231,expense,Education,321,2024-06-12,353
+1,3,222,expense,Entertainment,2,2024-06-12,784
+1,3,2222,expense,Entertainment,2,2024-06-12,434

@@ -128,7 +128,9 @@
     -fx-max-height: 1.3em;
     -fx-min-width: 2em;
 }
-
+#balanceBox:hover, #incomeBox:hover, #expenseBox:hover, #budgetBox:hover, #savingsBox:hover {
+    -fx-background-color: derive(#021c18,5%);
+}
 
 #balanceChart,#expenseChart,#incomeChart,#budgetChart,#savingsChart{
     -fx-max-width: Infinity;
