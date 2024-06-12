@@ -13,9 +13,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainAppView extends Application {
-
-    public void start(Stage primaryStage, String userId, String username) {
+private String userId = "1";
+private  String username = " weewewe";
+    public void start(Stage primaryStage) {
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/mainApp.css").toExternalForm();
+
 
         FontPack fontPack = new FontPack();
         fontPack.getFontJetBrain();
@@ -89,24 +91,11 @@ public class MainAppView extends Application {
         primaryStage.setTitle("Budget Tracker");
         primaryStage.setMinWidth(1200*0.8);
         primaryStage.setMinHeight(800*0.8);
-        primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> adjustFontSize(root, newVal.doubleValue(), primaryStage.getHeight()));
-        primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> adjustFontSize(root, primaryStage.getWidth(), newVal.doubleValue()));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
 
-    private void adjustFontSize(HBox root, double newWidth, double newHeight) {
-        double fontSize = Math.min(newWidth, newHeight) / 70; // Scale based on the smaller dimension
-        root.setStyle("-fx-font-size: " + fontSize + "px;");
-    }
-
-
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-
     }
 }

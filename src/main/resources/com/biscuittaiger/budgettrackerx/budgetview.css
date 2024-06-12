@@ -3,8 +3,71 @@
     -fx-text-fill: white;
 
 }
+#titleLabel{
+    -fx-translate-y: 15px;
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+}
+#budgetLabel{
+    -fx-translate-y:10px;
+    -fx-text-fill: #5b5959;
+    -fx-font-size: 15px;
+}
+
 #monthSelection{
      -fx-base:#252728;
      -fx-translate-x: 10px;
-     -fx-translate-y: 10px;
+     -fx-translate-y: 30px;
  }
+
+#leftbox{
+    -fx-background-color: #111011;
+    -fx-background-radius: 1em;
+    -fx-translate-y: 25px;
+    -fx-text-fill: white;
+    -fx-min-height: 550px;
+    -fx-min-width: 500px;
+}
+#midbox{
+    -fx-translate-y: 30px;
+}
+#categorySelection{
+    -fx-base: #373a3a;
+    -fx-font-size: 13px;
+    -fx-min-width: 300px;
+    -fx-min-height: 33px;
+    -fx-border-color:#373a3a ;
+}
+#addButton{
+    -fx-min-width: 300px;
+    -fx-background-color: #10b880;
+    -fx-text-fill: white;
+}
+#addButton:hover{
+    -fx-background-color: #049769;
+}
+#amountField{
+    -fx-min-width: 300px;
+    -fx-min-height: 33px;
+
+}
+#categoryLabel{
+    -fx-text-fill: WHite;
+    -fx-font-size: 20px;
+
+}
+#budgetBox, #expenseBox, #withinBudgetBox, #totalBudgetBox{
+    -fx-background-color:#252728;
+    -fx-text-fill: White;
+    -fx-background-radius: 5px;
+    -fx-max-width: 300px;
+    -fx-max-height: 70px;
+    -fx-translate-x: 100px;
+}#budgetBox:hover, #expenseBox:hover, #withinBudgetBox:hover, #totalBudgetBox:hover {
+    -fx-background-color: derive(#252728,20%);
+ }
+#budgetLabel, #expenseLabel, #withinBudgetLabel, #totalBudgetLabel{
+    -fx-text-alignment: center;
+    -fx-font-size: 15px;
+    -fx-text-fill: White;
+}

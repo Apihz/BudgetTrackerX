@@ -1,10 +1,8 @@
 package com.biscuittaiger.budgettrackerx.View;
 
 import com.biscuittaiger.budgettrackerx.App.BudgetApp;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -12,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +25,7 @@ public class BudgetView {
     private Label budgetLabel;
     private Label expenseLabel;
     private Label withinBudgetLabel;
+    private Label totalBudgetLabel;
     private String userId;
     private static final String BudgetFile = "src/main/java/com/biscuittaiger/budgettrackerx/Model/BudgetData.txt";
     private static ArrayList<BudgetApp> budgetList = new ArrayList<>();
@@ -41,14 +39,17 @@ public class BudgetView {
         // Load budgets from file
         loadBudgetsFromFile();
 
-        VBox root = new VBox(25);
-        HBox topBox = new HBox(10);
-        VBox midBox = new VBox(20);
-        HBox bottomBox = new HBox(40);
+        VBox root = new VBox(15);
+        HBox center = new HBox(25);
+        center.setAlignment(Pos.CENTER);
+        VBox leftbox = new VBox(25);leftbox.setId("leftbox");
+        VBox rightbox = new VBox(25);
+        VBox header = new VBox(10);
+        VBox midBox = new VBox(20);midBox.setId("midbox");
         VBox monthBox = new VBox(10);
         VBox categoryBox = new VBox(10);
-        HBox amountBox = new HBox(10);
         VBox expenseBox = new VBox(10);
+        VBox totalBudgetBox = new VBox(10);
         VBox withinBudgetBox = new VBox(10);
         VBox budgetBox = new VBox(10);
 
@@ -61,79 +62,103 @@ public class BudgetView {
         List<String> months = Arrays.asList("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC");
         monthSelection.getItems().addAll(months);
         monthSelection.setValue("JAN");
-        monthSelection.setStyle("-fx-font-size: 12 px;");
+        monthSelection.setStyle("-fx-font-size: 12 px; -fx-text-fill: white");
         monthBox.getChildren().addAll(monthSelection);
-        monthBox.setAlignment(Pos.TOP_LEFT);
+        monthBox.setAlignment(Pos.CENTER);
         VBox.setMargin(monthSelection, new Insets(10, 0, 0, 0));
 
 
         //title
         Label titleLabel = new Label("BUDGET PLANNING");
-        titleLabel.setAlignment(Pos.TOP_CENTER);
-        titleLabel.setStyle("-fx-font-size: 30 px; -fx-font-weight: bold;");
-        topBox.getChildren().add(titleLabel);
-        topBox.setAlignment(Pos.TOP_CENTER);
+        titleLabel.setId("titleLabel");
+        titleLabel.setAlignment(Pos.CENTER);
+        Label budgetInformation = new Label("Set your budget for each category and each month");
+        budgetInformation.setId("budgetLabel");
+         budgetInformation.setAlignment(Pos.CENTER);
+        header.getChildren().addAll(titleLabel, budgetInformation);
+        header.setAlignment(Pos.CENTER);
+
+
 
         //midBox
         // categoryBox
         categorySelection = new ComboBox<>();
+        categorySelection.setId("categorySelection");
         categorySelection.setMinWidth(200);
         List<String> categories = Arrays.asList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Transportation", "Other Expenses");
         categorySelection.getItems().addAll(categories);
         categorySelection.setValue("Shopping");
-        categorySelection.setStyle("-fx-font-size: 16px;");
         Label categoryLabel = new Label("Choose Category");
+        categoryLabel.setId("categoryLabel");
         categoryBox.getChildren().addAll(categoryLabel, categorySelection);
 
         // amountBox + budget button + feedback label
         amountField = new TextField();
+        amountField.setId("amountField");
+        amountField.setId("amountField");
         amountField.setPromptText("Enter Budget Amount");
         amountField.setMaxSize(200, 40);
 
         Button addButton = new Button("Set Budget");
+        addButton.setId("addButton");
         addButton.setStyle("-fx-font-size: 16px;");
-        amountBox.getChildren().addAll(amountField, addButton);
 
         feedbackLabel = new Label();
         feedbackLabel.setTextFill(Color.GREEN);
 
-        amountBox.setAlignment(Pos.CENTER);
         categoryBox.setAlignment(Pos.CENTER);
 
-        midBox.getChildren().addAll(categoryBox, amountBox, feedbackLabel);
+        midBox.getChildren().addAll(categoryBox, amountField,addButton, feedbackLabel);
         midBox.setAlignment(Pos.CENTER);
 
         //bottomBox
         //budgetBox
         budgetLabel = new Label();
+        budgetLabel.setId("budgetLabel");
+        budgetBox.setId("budgetBox");
         budgetBox.getChildren().addAll(budgetLabel);
+        budgetBox.setAlignment(Pos.CENTER);
+        budgetLabel.setStyle("-fx-translate-y: -2px");
+        budgetBox.setPadding(new Insets(10,0,10,0));
+        VBox.setMargin(budgetBox,new Insets(-10,0,0,0));
 
         //expenseBox
         expenseLabel = new Label();
+        expenseLabel.setId("expenseLabel");
+        expenseBox.setId("expenseBox");
         expenseBox.getChildren().addAll(expenseLabel);
+        expenseBox.setAlignment(Pos.CENTER);
+        expenseBox.setPadding(new Insets(10,0,10,0));
+        VBox.setMargin(expenseBox, new Insets(-15,0,0,0));
 
-        budgetLabel.setStyle("-fx-font-size: 16px; -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 5px;");
-        expenseLabel.setStyle("-fx-font-size: 16px; -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 5px;");
-
-        bottomBox.getChildren().addAll(budgetBox, expenseBox);
-        bottomBox.setAlignment(Pos.CENTER);
+        totalBudgetLabel = new Label();
+        totalBudgetLabel.setId("totalBudgetLabel");
+        totalBudgetBox.getChildren().addAll(totalBudgetLabel);
+        totalBudgetBox.setId("totalBudgetBox");
+        totalBudgetBox.setAlignment(Pos.CENTER);
+        totalBudgetBox.setPadding(new Insets(10,0,10,0));
+        VBox.setMargin(totalBudgetBox, new Insets(-15,0,0,0));
 
         //comparisonBox
         withinBudgetLabel = new Label();
-        withinBudgetLabel.setStyle("-fx-font-weight: bold");
+        withinBudgetLabel.setId("withinBudgetLabel");
         withinBudgetBox.getChildren().addAll(withinBudgetLabel);
+        withinBudgetBox.setId("withinBudgetBox");
         withinBudgetBox.setAlignment(Pos.CENTER);
+        withinBudgetBox.setPadding(new Insets(10,0,10,0));
+        VBox.setMargin(withinBudgetBox, new Insets(-15,0,0,0));
 
-        withinBudgetLabel.setStyle("-fx-font-size: 20px; -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 5px;");
 
         // Set up event handlers
         addButton.setOnAction(e -> setBudget());
         monthSelection.setOnAction(e -> displayBudgetStatus());
         categorySelection.setOnAction(e -> displayBudgetStatus());
 
-        root.getChildren().addAll(monthBox, topBox, midBox, bottomBox, withinBudgetBox);
+        leftbox.getChildren().addAll(midBox,budgetBox, expenseBox,totalBudgetBox, withinBudgetBox);
+        center.getChildren().add(leftbox);
 
-        // Display initial status
+        root.getChildren().addAll(header,monthBox,center);
+    // Display initial status
         displayBudgetStatus();
         return root;
     }
@@ -168,7 +193,7 @@ public class BudgetView {
         int monthInt = getMonthAsInt(month);
         String category = categorySelection.getValue();
         double budgetAmount = readBudget(userId, monthInt, category);
-
+        calculateTotalBudgetForMonth(userId,monthInt);
         double[] expenses;
         try {
             expenses = BudgetApp.readAndCalculateExpenses(userId, monthInt);
@@ -209,8 +234,8 @@ public class BudgetView {
                 break;
         }
 
-        budgetLabel.setText("Budgeted:" + String.format("\nRM%.2f", budgetAmount));
-        expenseLabel.setText("Total Expense:" + String.format("\nRM%.2f", expenseAmount));
+        budgetLabel.setText(category+" budget:" + String.format("\nRM%.2f", budgetAmount));
+        expenseLabel.setText("Total Expense for "+category+":" + String.format("\nRM%.2f", expenseAmount));
 
         if (expenseAmount > budgetAmount) {
             withinBudgetLabel.setText("You have exceeded\n the budget!!!");
@@ -223,7 +248,7 @@ public class BudgetView {
     }
 
     // Save budget to ArrayList and text file
-    private static void saveBudget(String userId, int month, String budgetCategory, double budgetAmount) {
+    private void saveBudget(String userId, int month, String budgetCategory, double budgetAmount) {
         boolean found = false;
 
         for (BudgetApp budgetItem : budgetList) {
@@ -250,7 +275,7 @@ public class BudgetView {
     }
 
     // Read budget from ArrayList
-    private static double readBudget(String userId, int month, String category) {
+    public double readBudget(String userId, int month, String category) {
         for (BudgetApp budgetItem : budgetList) {
             if (budgetItem.getUserId().equals(userId) && budgetItem.getMonth() == month && budgetItem.getBudgetCategory().equals(category)) {
                 return budgetItem.getBudgetAmount();
@@ -261,7 +286,7 @@ public class BudgetView {
 
 
     // Load budgets from file into ArrayList
-    private static void loadBudgetsFromFile() {
+    private void loadBudgetsFromFile() {
         budgetList.clear();
 
         try (Scanner scanner = new Scanner(new File(BudgetFile))) {
@@ -318,10 +343,11 @@ public class BudgetView {
                 totalBudget += budgetItem.getBudgetAmount();
             }
         }
+        totalBudgetLabel.setText("Total budget for this month: \nRM"+totalBudget);
        return totalBudget;
     }
 
-    public static void updateDashboardBudgetInfo(String userId, int month, double updatedBudget) {
+    public void updateDashboardBudgetInfo(String userId, int month, double updatedBudget) {
         String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt";
 
         try {

@@ -42,7 +42,9 @@
     -fx-translate-y: 8px;
     -fx-font-size: 13px;
 }
-
+.scoll-pane{
+    -fx-background-color: #111011;
+}
 #notificationBox{
     -fx-background-color:#111011;
     -fx-background-radius: 1em;
@@ -52,10 +54,34 @@
     -fx-min-width: 26em;
     -fx-min-height: 35em;
 }
+#notificationScrollPane{
+    -fx-translate-y: 10;
+    -fx-background-color: #111011;
+    -fx-background-radius: 1em;
+}
+
+.scroll-pane .viewport,.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background: #2b2b2b;
+    -fx-background-color:  #111011;
+}
+/* Style for the scroll bars */
+.scroll-pane .scroll-bar:vertical .increment-arrow,
+.scroll-pane .scroll-bar:vertical .decrement-arrow,
+.scroll-pane .scroll-bar:horizontal .increment-arrow,
+.scroll-pane .scroll-bar:horizontal .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb,
+.scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-background-color: #4a4a4a;
+}
+
 #notifications{
     -fx-text-fill: WHITE;
-    -fx-translate-y:4em;
-    -fx-translate-x: 2em;
+    -fx-translate-y:1.5em;
+    -fx-translate-x: 1em;
 }
 #notificationText{
     -fx-font-size: 15px;
@@ -63,6 +89,13 @@
     -fx-translate-y:0.5em;
     -fx-translate-x: 1em;
 }
+#notificationLabel{
+    -fx-text-fill: white;
+}
+#notificationList{
+    -fx-background-color: red;
+}
+
 .menu-button {
     -fx-base: #252728;
     -fx-background-color: #252728;
@@ -119,6 +152,8 @@
     -fx-background-color: #252728;
     -fx-fill: #252728;
 }
+
+
 
 .chart-plot-background {
     -fx-background-color: transparent;

@@ -1,5 +1,6 @@
 package com.biscuittaiger.budgettrackerx.View;
 
+import com.biscuittaiger.budgettrackerx.App.BudgetApp;
 import com.biscuittaiger.budgettrackerx.App.DashboardApp;
 import com.biscuittaiger.budgettrackerx.App.TransactionApp;
 import com.biscuittaiger.budgettrackerx.Model.IconPack;
@@ -18,12 +19,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
+
 import javafx.scene.Node;
-import javafx.util.Duration;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -41,7 +41,7 @@ public class DashboardView {
     private Label dateTimeLabel;
     private String userId;
     private TableView<TransactionApp> transactionTable;
-
+    private VBox notifications;
     private VBox balanceBox;
     private VBox incomeBox;
     private VBox expenseBox;
@@ -210,16 +210,23 @@ public class DashboardView {
         VBox notificationHeader = new VBox();
         notificationHeader.setId("notificationHeader");
         notificationHeader.getChildren().addAll(notificationText);
-        VBox notifications = new VBox();
+        notifications = new VBox();
         notifications.setId("notifications");
-
+        for(int i=0;i<12;i++) {
+            checkAndDisplayNotification(i);
+        }
         if (notifications.getChildren().isEmpty()) {
             Label noNotifications = new Label("No notifications");
-            noNotifications.setId("noNotifications");
+            noNotifications.setId("No Notifications");
             notifications.getChildren().add(noNotifications);
         }
+        ScrollPane scrollPane = new ScrollPane(notifications);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(380);
 
-        notificationBox.getChildren().addAll(notificationHeader, notifications);
+        scrollPane.setId("notificationScrollPane");
+
+        notificationBox.getChildren().addAll(notificationHeader,  scrollPane);
 
         thirdRow.getChildren().addAll(recentTransaction, notificationBox);
 
@@ -308,6 +315,68 @@ public class DashboardView {
             e.printStackTrace();
         }
         return transactions;
+    }
+
+    private void checkAndDisplayNotification(int month) {
+        String[] categories = {"Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Transportation", "Other Expenses"};
+        BudgetView budget = new BudgetView();
+        double[] categoryBudget = new double[categories.length];
+        double[] categoryExpense;
+        try {
+            categoryExpense = BudgetApp.readAndCalculateExpenses(userId, month);
+        } catch (FileNotFoundException e) {
+            return;
+        }
+
+        for (int i = 0; i < categories.length; i++) {
+            categoryBudget[i] = budget.readBudget(userId, month, categories[i]);
+            System.out.println("Budget for " + categories[i] + ": " + categoryBudget[i]); // Debugging statement
+        }
+
+        for (int i = 0; i < categories.length; i++) {
+            if (categoryExpense[i] > categoryBudget[i]) {
+                String message = "Your expenses for the category '" + categories[i] + "' in "+dashboard.getMonthName(month)+" have exceeded the budget!";
+                VBox notificationBox = createNotificationBox(message);
+                VBox.setMargin(notificationBox, new Insets(5, 0, 0, 0)); // Adds space around each notification box
+                notifications.getChildren().add(notificationBox);
+                ScrollPane scrollPane = new ScrollPane(notifications);
+                scrollPane.setFitToHeight(true);
+                scrollPane.setFitToWidth(true);
+            }
+        }
+    }
+    private VBox createNotificationBox(String message) {
+        VBox notificationList = new VBox();
+        ScrollPane scrollPane = new ScrollPane(notificationList);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(400);
+        scrollPane.setId("notificationScrollPane");
+        notificationList.setPadding(new Insets(5)); // Adds padding inside each notification box
+        notificationList.setStyle(
+                "-fx-border-color: #343434; " +
+                "-fx-border-width: 1;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-color: #343434"
+
+
+        ); // Adds border to each notification box
+        notificationList.setMaxWidth(275);
+        Label notificationLabel = new Label(message);
+        notificationLabel.setId("notificationLabel");
+        notificationLabel.setWrapText(true);
+        notificationLabel.getStyleClass().add("notification-message");
+
+        notificationList.getChildren().add(notificationLabel);
+
+        System.out.println("Notification added: " + message); // Debugging statement
+
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), notificationList);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+
+        return notificationList;
     }
 
 

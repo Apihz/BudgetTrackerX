@@ -94,7 +94,7 @@ public class LoginApp extends Application {
     public void showMainApp(Stage stage, String userid, String username) {
         MainAppView mainAppView = new MainAppView();
         try {
-            mainAppView.start(stage, userid, username);
+         //   mainAppView.start(stage, userid, username);
         } catch (Exception e) {
             e.printStackTrace();
         }
