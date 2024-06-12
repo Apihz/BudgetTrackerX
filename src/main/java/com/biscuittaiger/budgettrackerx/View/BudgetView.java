@@ -43,7 +43,6 @@ public class BudgetView {
         HBox center = new HBox(25);
         center.setAlignment(Pos.CENTER);
         VBox leftbox = new VBox(25);leftbox.setId("leftbox");
-        VBox rightbox = new VBox(25);
         VBox header = new VBox(10);
         VBox midBox = new VBox(20);midBox.setId("midbox");
         VBox monthBox = new VBox(10);
@@ -348,7 +347,7 @@ public class BudgetView {
     }
 
     public void updateDashboardBudgetInfo(String userId, int month, double updatedBudget) {
-        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt";
+        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/DashboardData.txt";
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -382,7 +381,7 @@ public class BudgetView {
                     }
                 }
 
-                stringBuilder.append(newLine.toString()).append("\n");
+                stringBuilder.append(newLine).append("\n");
             }
             reader.close();
 

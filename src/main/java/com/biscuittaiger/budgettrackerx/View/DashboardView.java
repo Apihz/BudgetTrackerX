@@ -292,7 +292,7 @@ public class DashboardView {
 
     private ObservableList<TransactionApp> getTransactionsFromFile(String userId, String month) {
         ObservableList<TransactionApp> transactions = FXCollections.observableArrayList();
-        String fileName = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionTEST.txt";
+        String fileName = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionData.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line = br.readLine(); // Skip the header
@@ -330,14 +330,14 @@ public class DashboardView {
 
         for (int i = 0; i < categories.length; i++) {
             categoryBudget[i] = budget.readBudget(userId, month, categories[i]);
-            System.out.println("Budget for " + categories[i] + ": " + categoryBudget[i]); // Debugging statement
+            System.out.println("Budget for " + categories[i] + ": " + categoryBudget[i]);
         }
 
         for (int i = 0; i < categories.length; i++) {
             if (categoryExpense[i] > categoryBudget[i]) {
                 String message = "Your expenses for the category '" + categories[i] + "' in "+dashboard.getMonthName(month)+" have exceeded the budget!";
                 VBox notificationBox = createNotificationBox(message);
-                VBox.setMargin(notificationBox, new Insets(5, 0, 0, 0)); // Adds space around each notification box
+                VBox.setMargin(notificationBox, new Insets(5, 0, 0, 0));
                 notifications.getChildren().add(notificationBox);
                 ScrollPane scrollPane = new ScrollPane(notifications);
                 scrollPane.setFitToHeight(true);
@@ -351,7 +351,7 @@ public class DashboardView {
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(400);
         scrollPane.setId("notificationScrollPane");
-        notificationList.setPadding(new Insets(5)); // Adds padding inside each notification box
+        notificationList.setPadding(new Insets(5));
         notificationList.setStyle(
                 "-fx-border-color: #343434; " +
                 "-fx-border-width: 1;" +
@@ -360,7 +360,7 @@ public class DashboardView {
                 "-fx-background-color: #343434"
 
 
-        ); // Adds border to each notification box
+        );
         notificationList.setMaxWidth(275);
         Label notificationLabel = new Label(message);
         notificationLabel.setId("notificationLabel");
@@ -369,7 +369,7 @@ public class DashboardView {
 
         notificationList.getChildren().add(notificationLabel);
 
-        System.out.println("Notification added: " + message); // Debugging statement
+        System.out.println("Notification added: " + message);
 
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), notificationList);
         fadeIn.setFromValue(0);

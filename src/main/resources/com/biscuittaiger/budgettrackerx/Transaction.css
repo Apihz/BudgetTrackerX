@@ -1,0 +1,105 @@
+
+.table-view .column-header {
+    -fx-background-color: transparent ;
+    -fx-fill: WHITE;
+    -fx-text-alignment: left;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(to bottom, rgba(100, 100, 100, 0.27), rgba(58, 58, 58, 0.27));
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+    -fx-padding: 5 0 5 10px;
+}
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #2f2f2f;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+.table-row-cell:even{
+    -fx-background-color: rgba(75, 75, 75, 0.07);
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+.table-view .virtual-flow .scroll-bar .increment-button,
+.table-view .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: #111011;
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb,
+.table-view .virtual-flow .scroll-bar:vertical  .thumb{
+    -fx-background-color:  linear-gradient(to bottom, rgba(210, 168, 168, 0.27), rgba(95, 96, 95, 0.27));
+}
+.table-view{
+    -fx-background-color: #111011;
+    -fx-translate-y: 35px;
+    -fx-min-height: 425px;
+    -fx-border-radius: 10px;
+
+}
+.table-view .table-cell .text {
+    -fx-fill: WHITE;
+}
+
+.table-view .filler{
+    -fx-background-color: transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: white;
+}
+
+#addButton{
+    -fx-background-color: #10b880;
+    -fx-text-fill: white;
+}
+#addButton:hover{
+    -fx-background-color: #049769;
+}
+#editButton{
+    -fx-background-color: #1086b8;
+    -fx-text-fill: white;
+}
+#editButton:hover{
+    -fx-background-color: #045f97;
+}
+#deleteButton{
+    -fx-background-color: #b81042;
+    -fx-text-fill: white;
+}
+#deleteButton:hover{
+    -fx-background-color: #970426;
+}
+
+#monthComboBox{
+    -fx-base:#252728;
+}
+
+#transactionLabel{
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+}
+#transactionHeader{
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+}
+#buttonBox{
+    -fx-translate-y: 30px;
+}
+

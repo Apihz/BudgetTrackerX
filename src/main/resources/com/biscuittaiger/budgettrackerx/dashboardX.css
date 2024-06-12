@@ -92,9 +92,7 @@
 #notificationLabel{
     -fx-text-fill: white;
 }
-#notificationList{
-    -fx-background-color: red;
-}
+
 
 .menu-button {
     -fx-base: #252728;
@@ -191,10 +189,10 @@
     -fx-background-color: transparent;
     -fx-fill: transparent;
     -fx-padding: 0;
-    -fx-shape: " "; /* Removes the icon shape */
-    -fx-scale-x: 0; /* Scales down the icon horizontally */
-    -fx-scale-y: 0; /* Scales down the icon vertically */
-    -fx-translate-x: -9999; /* Moves the icon off-screen */
+    -fx-shape: " ";
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+    -fx-translate-x: -9999;
 }
 
 

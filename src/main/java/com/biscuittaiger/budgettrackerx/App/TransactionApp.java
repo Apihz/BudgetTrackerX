@@ -24,9 +24,6 @@ public class TransactionApp {
         this.tranId = tranId;
     }
 
-    public int getNumber() {
-        return number;
-    }
 
     public String getUserId() {
         return userId;
@@ -64,10 +61,6 @@ public class TransactionApp {
         this.amount = amount;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -89,7 +82,4 @@ public class TransactionApp {
         return number + ": " + amount + ", " + type + ", " + category + ", " + details + ", " + date + ", " + tranId;
     }
 
-    public String toCSVFormat() {
-        return number + "," + userId + "," + month + "," + amount + "," + type + "," + category + "," + details + "," + date + "," + tranId;
-    }
 }

@@ -19,7 +19,7 @@ public class DashboardApp {
     private String userId;
     private int month;
     private ArrayList<ArrayList<Double>> userData = new ArrayList<>();
-    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt");
+    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/Model/DashboardData.txt");
 
     public DashboardApp(String userId, int month) {
         this.userId = userId;

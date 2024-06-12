@@ -1,7 +1,4 @@
 userId,month,amount,type,category,details,date,tranId
-1,1,100,income,salary,-,2024-1-1,24
-1,1,200,income,salary,-,2024-1-3,24
-1,1,39,expense,food,this week,2024-1-8,24
 1,2,501,income,freelance,salary,2024-2-1,24020174
 1,2,40,income,rental income,salary,2024-2-3,24020365
 2,3,150,income,freelance,monthly,2024-3-15,24031532
@@ -21,18 +18,17 @@ userId,month,amount,type,category,details,date,tranId
 2,6,999.00,expense,shopping,dwd,2024-06-11,dwd
 2,1,1000,income,income,gaji,2024-06-11,0c17ef16-0654-4436-9f02-94118f7bbd61
 2,1,10,income,income,2,2024-06-11,1290c8a0-2324-4ff9-8884-36fe512aeab0
-1,1,100,savings,savings,dw,2024-06-11,cc835bd7-d339-475b-b20d-df2b5a46f046
-1,1,90.0,expense,Education,pen,2024-01-17,e2900afe-4da7-4f91-adcf-10ae68701024
-1,1,10000,income,income,Gaji,2024-01-26,d95776c0-cde5-4e24-bf5f-e8c142bb56a3
-1,1,900,expense,Shopping,hehe,2024-06-12,df603616-0ad2-4a4c-b913-a8a1a6af2539
-1,1,100,expense,Entertainment,hgehe,2024-06-12,743bd609-3ae3-47d9-b1bc-7e034dd72b97
 1,4,2134,expense,Shopping,2,2024-06-12,6a761150-d79c-4f85-b6c9-1a7d800cd93a
 1,2,2222,expense,Shopping,2,2024-06-12,d2f2f966-acb5-4bd5-bc5f-3b439cb7e29a
 1,3,2222,expense,Shopping,22,2024-06-12,d0cda5ee-9ec5-44c7-810e-12cb14f1988a
-1,1,3123,expense,Shopping,3213,2024-06-12,b401b10b-f8f2-4721-b286-7e5aabfb33a3
 1,1,32131,expense,Shopping,3,2024-06-12,000e1d75-04f2-42f0-9c82-ace76be16d8e
-1,1,3,expense,Shopping,3,2024-06-12,a04f4834-3f2e-4fad-a570-8b6107809332
-1,1,3,expense,Shopping,3,2024-06-12,b952b210-bad9-4892-965d-10016236452c
+1,1,3.0,income,Shopping,3,2024-06-12,a04f4834-3f2e-4fad-a570-8b6107809332
+1,1,3.0,expense,Shopping,3,2024-06-12,b952b210-bad9-4892-965d-10016236452c
 1,1,3,expense,Education,3,2024-06-12,c482c1bb-079a-4cb3-9a86-4a0532476cce
 1,1,3,expense,Education,3,2024-06-12,5f5a5656-d7e3-47bc-bf14-493076803cd5
 1,1,3,expense,Education,3,2024-06-12,a616db75-7f2b-462c-b2a3-fa575964bbe4
+1,1,995566,income,income,cuci duit,2024-06-12,db5467d0-b40f-4a24-8d95-777325cbc5c2
+1,1,234,expense,Shopping,k,2024-06-12,762
+1,1,23,expense,Shopping,12,2024-06-12,625
+1,1,3,income,income,33,2024-06-12,765
+1,2,90,income,income,A,2024-06-12,308

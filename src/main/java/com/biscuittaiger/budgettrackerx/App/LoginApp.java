@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class LoginApp extends Application {
 
-    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/Model/user_info.txt");
+    private final Path USERS_FILE = Paths.get("src/main/java/com/biscuittaiger/budgettrackerx/Model/LoginData.txt");
     private LoginView loginView;
     private Stage primaryStage;
 

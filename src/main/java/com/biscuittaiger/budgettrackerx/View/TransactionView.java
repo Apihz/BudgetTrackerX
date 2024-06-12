@@ -32,7 +32,7 @@ public class TransactionView {
     private ComboBox<String> monthComboBox;
     private final String userId;
     private final ArrayList<TransactionApp> transactionApps;
-    private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionTEST.txt";
+    private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionData.txt";
 
     public TransactionView(String userId) {
         this.userId = userId;
@@ -42,10 +42,14 @@ public class TransactionView {
     }
 
     public VBox getTransactionView() {
+        String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/Transaction.css").toExternalForm();
+
         VBox transactionView = new VBox(10);
         transactionView.setPadding(new Insets(10));
+        transactionView.getStylesheets().add(css);
 
         monthComboBox = new ComboBox<>();
+        monthComboBox.setId("monthComboBox");
         List<String> months = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
         monthComboBox.getItems().addAll(months);
         monthComboBox.setValue("1");
@@ -78,6 +82,7 @@ public class TransactionView {
 
         // Buttons
         Button addButton = new Button("Add");
+        addButton.setId("addButton");
         addButton.setOnAction(e -> showAddTransactionDialog());
 
         transactionTable.setOnMouseClicked(event -> {
@@ -86,16 +91,23 @@ public class TransactionView {
             }
         });
 
+        Label transactionLabel = new Label("Transaction");
+        transactionLabel.setId("transactionLabel");
+        Label transactionHeader = new Label("Add,Edit,Delete your transaction");
+        transactionHeader.setId("transactionHeader");
+
         Button editButton = new Button("Edit");
+        editButton.setId("editButton");
         editButton.setOnAction(e -> editSelectedTransaction());
 
         Button deleteButton = new Button("Delete");
+        deleteButton.setId("deleteButton");
         deleteButton.setOnAction(event -> deleteSelectedTransaction());
 
         HBox buttonBox = new HBox(10, addButton, editButton, deleteButton);
+        buttonBox.setId("buttonBox");
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
-
-        transactionView.getChildren().addAll(monthComboBox, infoBox, buttonBox, transactionTable);
+        transactionView.getChildren().addAll(transactionLabel,transactionHeader,monthComboBox, infoBox, buttonBox, transactionTable);
         fetchAndDisplayTransactions(userId, monthComboBox.getValue());
         return transactionView;
     }
@@ -134,6 +146,7 @@ public class TransactionView {
         infoBox.setMinSize(10, 80);
         infoBox.setMaxSize(200, 120);
         infoBox.setPadding(new Insets(10));
+        infoBox.setId("informationBox");
         infoBox.setStyle("-fx-background-color: " + toHexString(backgroundColor) + "; -fx-border-color: black;");
 
         Label label = new Label(labelText);
@@ -251,10 +264,11 @@ public class TransactionView {
         grid.add(detailsField, 1, 3);
         grid.add(new Label("Date:"), 0, 4);
         grid.add(datePicker, 1, 4);
-
+        typeComboBox.getSelectionModel().selectFirst();
         typeComboBox.setOnAction(event -> {
             String selectedType = typeComboBox.getValue();
-            if (selectedType.equals("expense")) {
+            typeComboBox.getSelectionModel().selectFirst();
+            if (selectedType != null && selectedType.equals("expense")) {
                 categoryComboBox.setVisible(true);
                 categoryDisplayField.setVisible(false);
             } else {
@@ -273,22 +287,22 @@ public class TransactionView {
                 String details = detailsField.getText();
                 LocalDate date = datePicker.getValue();
 
-                if (amount.isEmpty() || type.isEmpty() || (type.equals("expense") && (category == null || category.isEmpty())) || details.isEmpty() || date == null) {
+                if (amount.isEmpty() || type == null || (type.equals("expense") && (category == null || category.isEmpty())) || details.isEmpty() || date == null) {
                     showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all fields");
                     return;
                 }
-
 
                 String month = monthComboBox.getValue();
 
                 writeTransactionToFile(userId, month, amount, type, category, details, date.toString());
                 fetchAndDisplayTransactions(userId, month);
-                calculateAndUpdateBudgetInfo(userId,Integer.parseInt(month));
+                calculateAndUpdateBudgetInfo(userId, Integer.parseInt(month));
                 dialog.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+
 
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(event -> dialog.close());
@@ -400,11 +414,30 @@ public class TransactionView {
     }
 
     private void writeTransactionToFile(String userId, String month, String amount, String type, String category, String details, String date) throws IOException {
-        String transactionId = UUID.randomUUID().toString();
+        List<String> existingIds = readExistingTransactionIds();
+
+        String transactionId;
+        do {
+            int randnum = (int) (Math.random() * 900) + 100;
+            transactionId = Integer.toString(randnum);
+        } while (existingIds.contains(transactionId));
 
         String transaction = userId + "," + month + "," + amount + "," + type + "," + category + "," + details + "," + date + "," + transactionId + "\n";
-
         Files.write(Paths.get(TRANS_FILE), transaction.getBytes(), StandardOpenOption.APPEND);
+    }
+
+    private List<String> readExistingTransactionIds() throws IOException {
+        List<String> existingIds = new ArrayList<>();
+        List<String> lines = Files.readAllLines(Paths.get(TRANS_FILE));
+
+        for (String line : lines) {
+            String[] delimiter = line.split(",");
+            if (delimiter.length > 7) {
+                existingIds.add(delimiter[7]);
+            }
+        }
+
+        return existingIds;
     }
 
     private void updateTransactionFile(TransactionApp transactionApp) throws IOException {
@@ -439,7 +472,7 @@ public class TransactionView {
     }
 
     public static void updateDashboardBudgetInfo(String userId, int month, double updatedIncome, double updatedExpense, double updatedBalance, double updatedSavings) {
-        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/budget_info.txt";
+        String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/DashboardData.txt";
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));

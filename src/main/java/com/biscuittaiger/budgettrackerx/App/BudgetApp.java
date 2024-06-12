@@ -43,7 +43,7 @@ public class BudgetApp {
         double shoppingExpense = 0, educationExpense = 0, electronicsExpense = 0, entertainmentExpense = 0, foodBeveragesExpense = 0,
                 healthBeautyExpense = 0, medicalExpense = 0, transportationExpense = 0, otherExpense = 0;
 
-        Scanner readFile = new Scanner(new File("src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionTEST.txt"));
+        Scanner readFile = new Scanner(new File("src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionData.txt"));
         try {
             while (readFile.hasNext()) {
                 String line = readFile.nextLine();
