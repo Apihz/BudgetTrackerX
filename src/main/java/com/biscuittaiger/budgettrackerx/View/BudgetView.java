@@ -54,7 +54,7 @@ public class BudgetView {
 
         root.getStylesheets().add(css);
         //topBox
-        // monthBox//skibidi
+        // monthBox
         monthSelection = new ComboBox<>();
         monthSelection.setId("monthSelection");
         monthSelection.setMinWidth(200);
