@@ -278,7 +278,7 @@ public class TransactionView {
             }
         });
 
-        Button saveButton = new Button("Savde");
+        Button saveButton = new Button("Save");
         saveButton.setOnAction(event -> {
             try {
                 String amount = amountField.getText();
