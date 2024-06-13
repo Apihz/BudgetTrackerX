@@ -21,6 +21,7 @@ public class LoginApp extends Application {
     private LoginView loginView;
     private Stage primaryStage;
 
+    @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         loginView = new LoginView(primaryStage, this);
@@ -72,8 +73,8 @@ public class LoginApp extends Application {
                 writer.write(userid + "," + username + "," + password);
                 writer.newLine();
                 showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User registered successfully!");
-                DashboardApp dashboard = new DashboardApp(String.valueOf(userid),1);
-                dashboard.initializeNewAccount();
+                 DashboardApp dashboard = new DashboardApp(String.valueOf(userid), 1);
+                 dashboard.initializeNewAccount();
                 loginView.showLoginPage();
             }
         } catch (IOException e) {
@@ -92,9 +93,9 @@ public class LoginApp extends Application {
     }
 
     public void showMainApp(Stage stage, String userid, String username) {
-        MainAppView mainAppView = new MainAppView();
+        MainAppView mainAppView = new MainAppView(userid, username);
         try {
-         //   mainAppView.start(stage, userid, username);
+            mainAppView.start(stage);
         } catch (Exception e) {
             e.printStackTrace();
         }

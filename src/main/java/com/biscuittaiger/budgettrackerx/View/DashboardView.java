@@ -330,7 +330,6 @@ public class DashboardView {
 
         for (int i = 0; i < categories.length; i++) {
             categoryBudget[i] = budget.readBudget(userId, month, categories[i]);
-            System.out.println("Budget for " + categories[i] + ": " + categoryBudget[i]);
         }
 
         for (int i = 0; i < categories.length; i++) {
@@ -368,8 +367,6 @@ public class DashboardView {
         notificationLabel.getStyleClass().add("notification-message");
 
         notificationList.getChildren().add(notificationLabel);
-
-        System.out.println("Notification added: " + message);
 
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), notificationList);
         fadeIn.setFromValue(0);

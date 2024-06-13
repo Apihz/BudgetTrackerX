@@ -31,29 +31,32 @@ public class BudgetView {
     private static ArrayList<BudgetApp> budgetList = new ArrayList<>();
 
 
-    public VBox BudgetView (String userId) {
+    public VBox BudgetView(String userId) {
 
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/budgetview.css").toExternalForm();
 
         this.userId = userId;
+
         // Load budgets from file
         loadBudgetsFromFile();
 
         VBox root = new VBox(15);
         HBox center = new HBox(25);
         center.setAlignment(Pos.CENTER);
-        VBox leftbox = new VBox(25);leftbox.setId("leftbox");
+        VBox leftbox = new VBox(25);
+        leftbox.setId("leftbox");
         VBox header = new VBox(10);
-        VBox midBox = new VBox(20);midBox.setId("midbox");
+        VBox midBox = new VBox(20);
+        midBox.setId("midbox");
         VBox monthBox = new VBox(10);
         VBox categoryBox = new VBox(10);
         VBox expenseBox = new VBox(10);
         VBox totalBudgetBox = new VBox(10);
         VBox withinBudgetBox = new VBox(10);
         VBox budgetBox = new VBox(10);
-
         root.getStylesheets().add(css);
-        //topBox
+
+
         // monthBox
         monthSelection = new ComboBox<>();
         monthSelection.setId("monthSelection");
@@ -61,11 +64,8 @@ public class BudgetView {
         List<String> months = Arrays.asList("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC");
         monthSelection.getItems().addAll(months);
         monthSelection.setValue("JAN");
-        monthSelection.setStyle("-fx-font-size: 12 px; -fx-text-fill: white");
         monthBox.getChildren().addAll(monthSelection);
         monthBox.setAlignment(Pos.CENTER);
-        VBox.setMargin(monthSelection, new Insets(10, 0, 0, 0));
-
 
         //title
         Label titleLabel = new Label("BUDGET PLANNING");
@@ -73,13 +73,11 @@ public class BudgetView {
         titleLabel.setAlignment(Pos.CENTER);
         Label budgetInformation = new Label("Set your budget for each category and each month");
         budgetInformation.setId("budgetLabel");
-         budgetInformation.setAlignment(Pos.CENTER);
+        budgetInformation.setAlignment(Pos.CENTER);
         header.getChildren().addAll(titleLabel, budgetInformation);
         header.setAlignment(Pos.CENTER);
 
 
-
-        //midBox
         // categoryBox
         categorySelection = new ComboBox<>();
         categorySelection.setId("categorySelection");
@@ -104,13 +102,16 @@ public class BudgetView {
 
         feedbackLabel = new Label();
         feedbackLabel.setTextFill(Color.GREEN);
-
+        HBox feedbackLabelBox = new HBox();
+        feedbackLabelBox.getChildren().setAll(feedbackLabel);
+        feedbackLabelBox.setAlignment(Pos.CENTER);
+        HBox.setMargin(feedbackLabel,new Insets(5,0,0,0));
         categoryBox.setAlignment(Pos.CENTER);
 
-        midBox.getChildren().addAll(categoryBox, amountField,addButton, feedbackLabel);
+        midBox.getChildren().addAll(categoryBox, amountField, addButton);
         midBox.setAlignment(Pos.CENTER);
 
-        //bottomBox
+
         //budgetBox
         budgetLabel = new Label();
         budgetLabel.setId("budgetLabel");
@@ -118,8 +119,8 @@ public class BudgetView {
         budgetBox.getChildren().addAll(budgetLabel);
         budgetBox.setAlignment(Pos.CENTER);
         budgetLabel.setStyle("-fx-translate-y: -2px");
-        budgetBox.setPadding(new Insets(10,0,10,0));
-        VBox.setMargin(budgetBox,new Insets(-10,0,0,0));
+        budgetBox.setPadding(new Insets(10, 0, 10, 0));
+        VBox.setMargin(budgetBox, new Insets(-10, 0, 0, 0));
 
         //expenseBox
         expenseLabel = new Label();
@@ -127,16 +128,17 @@ public class BudgetView {
         expenseBox.setId("expenseBox");
         expenseBox.getChildren().addAll(expenseLabel);
         expenseBox.setAlignment(Pos.CENTER);
-        expenseBox.setPadding(new Insets(10,0,10,0));
-        VBox.setMargin(expenseBox, new Insets(-15,0,0,0));
+        expenseBox.setPadding(new Insets(10, 0, 10, 0));
+        VBox.setMargin(expenseBox, new Insets(-15, 0, 0, 0));
 
+        //totalBudgetBox
         totalBudgetLabel = new Label();
         totalBudgetLabel.setId("totalBudgetLabel");
         totalBudgetBox.getChildren().addAll(totalBudgetLabel);
         totalBudgetBox.setId("totalBudgetBox");
         totalBudgetBox.setAlignment(Pos.CENTER);
-        totalBudgetBox.setPadding(new Insets(10,0,10,0));
-        VBox.setMargin(totalBudgetBox, new Insets(-15,0,0,0));
+        totalBudgetBox.setPadding(new Insets(10, 0, 10, 0));
+        VBox.setMargin(totalBudgetBox, new Insets(-15, 0, 0, 0));
 
         //comparisonBox
         withinBudgetLabel = new Label();
@@ -144,20 +146,18 @@ public class BudgetView {
         withinBudgetBox.getChildren().addAll(withinBudgetLabel);
         withinBudgetBox.setId("withinBudgetBox");
         withinBudgetBox.setAlignment(Pos.CENTER);
-        withinBudgetBox.setPadding(new Insets(10,0,10,0));
-        VBox.setMargin(withinBudgetBox, new Insets(-15,0,0,0));
+        withinBudgetBox.setPadding(new Insets(10, 0, 10, 0));
+        VBox.setMargin(withinBudgetBox, new Insets(-15, 0, 0, 0));
 
-
-        // Set up event handlers
         addButton.setOnAction(e -> setBudget());
         monthSelection.setOnAction(e -> displayBudgetStatus());
         categorySelection.setOnAction(e -> displayBudgetStatus());
 
-        leftbox.getChildren().addAll(midBox,budgetBox, expenseBox,totalBudgetBox, withinBudgetBox);
+        leftbox.getChildren().addAll(midBox, feedbackLabelBox, budgetBox, expenseBox, totalBudgetBox, withinBudgetBox);
         center.getChildren().add(leftbox);
 
-        root.getChildren().addAll(header,monthBox,center);
-    // Display initial status
+        root.getChildren().addAll(header, monthBox, center);
+
         displayBudgetStatus();
         return root;
     }
@@ -181,10 +181,10 @@ public class BudgetView {
 
         feedbackLabel.setText("Budget added & updated successfully!");
         displayBudgetStatus();
-        double totalBudgetMonthly = calculateTotalBudgetForMonth(userId,monthInt);
+        double totalBudgetMonthly = calculateTotalBudgetForMonth(userId, monthInt);
         // Clear input fields
         amountField.clear();
-        updateDashboardBudgetInfo(userId, monthInt, totalBudgetMonthly);
+        setDashboardBudgetInfo(userId, monthInt, totalBudgetMonthly);
     }
 
     private void displayBudgetStatus() {
@@ -192,7 +192,7 @@ public class BudgetView {
         int monthInt = getMonthAsInt(month);
         String category = categorySelection.getValue();
         double budgetAmount = readBudget(userId, monthInt, category);
-        calculateTotalBudgetForMonth(userId,monthInt);
+        calculateTotalBudgetForMonth(userId, monthInt);
         double[] expenses;
         try {
             expenses = BudgetApp.readAndCalculateExpenses(userId, monthInt);
@@ -233,8 +233,8 @@ public class BudgetView {
                 break;
         }
 
-        budgetLabel.setText(category+" budget:" + String.format("\nRM%.2f", budgetAmount));
-        expenseLabel.setText("Total Expense for "+category+":" + String.format("\nRM%.2f", expenseAmount));
+        budgetLabel.setText(category + " budget:" + String.format("\nRM%.2f", budgetAmount));
+        expenseLabel.setText("Expense for " + category + ":" + String.format("\nRM%.2f", expenseAmount));
 
         if (expenseAmount > budgetAmount) {
             withinBudgetLabel.setText("You have exceeded\n the budget!!!");
@@ -251,8 +251,8 @@ public class BudgetView {
         boolean found = false;
 
         for (BudgetApp budgetItem : budgetList) {
-            if (budgetItem.getUserId().equals(userId) && budgetItem.getMonth()==month && budgetItem.getBudgetCategory().equals(budgetCategory)) {
-               budgetItem.setBudgetAmount(budgetAmount);
+            if (budgetItem.getUserId().equals(userId) && budgetItem.getMonth() == month && budgetItem.getBudgetCategory().equals(budgetCategory)) {
+                budgetItem.setBudgetAmount(budgetAmount);
                 found = true;
                 break;
             }
@@ -338,15 +338,15 @@ public class BudgetView {
     private double calculateTotalBudgetForMonth(String userId, int month) {
         double totalBudget = 0;
         for (BudgetApp budgetItem : budgetList) {
-            if (budgetItem.getMonth() == month && budgetItem.getUserId().equals(userId) ) {
+            if (budgetItem.getMonth() == month && budgetItem.getUserId().equals(userId)) {
                 totalBudget += budgetItem.getBudgetAmount();
             }
         }
-        totalBudgetLabel.setText("Total budget for this month: \nRM"+totalBudget);
-       return totalBudget;
+        totalBudgetLabel.setText("Total budget for this month: \nRM" + totalBudget);
+        return totalBudget;
     }
 
-    public void updateDashboardBudgetInfo(String userId, int month, double updatedBudget) {
+    public void setDashboardBudgetInfo(String userId, int month, double updatedBudget) {
         String filePath = "src/main/java/com/biscuittaiger/budgettrackerx/Model/DashboardData.txt";
 
         try {

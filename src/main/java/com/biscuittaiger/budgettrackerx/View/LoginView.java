@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class LoginView {
@@ -17,11 +18,13 @@ public class LoginView {
     private Button loginBtn;
     private Button clearBtn;
     private Button registerBtn;
+    private Button regBackBtn;
     private TextField regUsernameField;
     private PasswordField regPasswordField;
     private Button regSubmitBtn;
     private Stage primaryStage;
     private LoginApp loginApp;
+    private HBox hbox;
 
     public LoginView(Stage primaryStage, LoginApp loginApp) {
         this.primaryStage = primaryStage;
@@ -48,6 +51,9 @@ public class LoginView {
         clearBtn.setStyle("-fx-background-color: turquoise; -fx-text-fill: black;");
         registerBtn.setStyle("-fx-background-color: turquoise; -fx-text-fill: black;");
 
+        hbox = new HBox(20);
+        hbox.getChildren().addAll(clearBtn, loginBtn);
+
         GridPane gridpane = new GridPane();
         gridpane.setMinSize(400, 400);
         gridpane.setPadding(new Insets(10, 10, 10, 10));
@@ -59,8 +65,7 @@ public class LoginView {
         gridpane.add(usernameField, 1, 0);
         gridpane.add(passwordlbl, 0, 1);
         gridpane.add(passwordField, 1, 1);
-        gridpane.add(loginBtn, 1, 2);
-        gridpane.add(clearBtn, 0, 2);
+        gridpane.add(hbox, 1, 2);
         gridpane.add(registerlbl, 0, 3);
         gridpane.add(registerBtn, 0, 4);
 
@@ -97,6 +102,11 @@ public class LoginView {
 
         regSubmitBtn = new Button("Submit");
         regSubmitBtn.setStyle("-fx-background-color: turquoise; -fx-text-fill: black;");
+        regBackBtn = new Button("Back");
+        regBackBtn.setStyle("-fx-background-color: turquoise; -fx-text-fill: black;");
+
+        HBox hbox = new HBox(20);
+        hbox.getChildren().addAll(regBackBtn, regSubmitBtn);
 
         GridPane gridpane = new GridPane();
         gridpane.setMinSize(400, 400);
@@ -109,13 +119,16 @@ public class LoginView {
         gridpane.add(regUsernameField, 1, 0);
         gridpane.add(passwordlbl, 0, 1);
         gridpane.add(regPasswordField, 1, 1);
-        gridpane.add(regSubmitBtn, 1, 2);
+        gridpane.add(hbox, 1, 2);
         gridpane.setStyle("-fx-background-color: darkslategrey;");
 
         regSubmitBtn.setOnAction(e -> {
             if (validateInput(regUsernameField, regPasswordField)) {
                 loginApp.registerUser(regUsernameField.getText(), regPasswordField.getText());
             }
+        });
+        regBackBtn.setOnAction(e->{
+            showLoginPage();
         });
 
         Scene scene = new Scene(gridpane, 500, 400);

@@ -112,7 +112,7 @@ public class AnalysisView extends VBox {
                 String type = data[3];
                 String dataCategory = data[4];
 
-                if (dataMonth == month && type.equals("expense") && dataCategory.equals(category)) {
+                if (userId.equals(data[0]) && dataMonth == month && type.equals("expense") && dataCategory.equals(category)) {
                     categoryAmount += amount;
                 }
             }

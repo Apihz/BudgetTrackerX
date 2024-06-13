@@ -14,11 +14,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainAppView extends Application {
-private String userId = "1";
-private  String username = " weewewe";
+
+    private String userId;
+    private String username;
+
+    public MainAppView(String userId, String username) {
+        this.userId = userId;
+        this.username = username;
+    }
+
+    @Override
     public void start(Stage primaryStage) {
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/mainApp.css").toExternalForm();
-
 
         FontPack fontPack = new FontPack();
         fontPack.getFontJetBrain();
@@ -45,13 +52,13 @@ private  String username = " weewewe";
         BudgetView budgetView = new BudgetView();
         AnalysisApp analysisApp = new AnalysisApp();
 
-        rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));//initialized dashboardView upon successful login
+        rightBar.getChildren().add(dashboardView.DashboardOverview(userId, username)); //initialized dashboardView upon successful login
         Button button1 = new Button("Dashboard");
         button1.setId("button1");
         button1.setGraphic(icon.getDashboardIcon());
         button1.setOnAction(e ->  {
             rightBar.getChildren().clear();
-            rightBar.getChildren().add(dashboardView.DashboardOverview(userId,username));
+            rightBar.getChildren().add(dashboardView.DashboardOverview(userId, username));
         });
         Button button2 = new Button("Transaction");
         button2.setId("button2");
@@ -74,12 +81,9 @@ private  String username = " weewewe";
             rightBar.getChildren().clear();
             rightBar.getChildren().add(budgetView.BudgetView(userId));
         });
-        Button button5 = new Button("Notification");
-        button5.setId("button5");
-        button5.setGraphic(icon.getNotificationIcon());
-        leftToolBar.getChildren().addAll(leftHeader, button1, button2, button3, button4, button5);
-        leftBar.getChildren().addAll(leftHeader, leftToolBar);
 
+        leftToolBar.getChildren().addAll(leftHeader, button1, button2, button3, button4);
+        leftBar.getChildren().addAll(leftHeader, leftToolBar);
 
         VBox.setVgrow(rightBar, Priority.ALWAYS);
         rightBar.minWidthProperty().bind(root.widthProperty().multiply(0.8)); // 80% width
@@ -90,13 +94,10 @@ private  String username = " weewewe";
         Scene scene = new Scene(root, 1300, 760);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Budget Tracker");
-        primaryStage.setMinWidth(1200*0.8);
-        primaryStage.setMinHeight(800*0.8);
+        primaryStage.setMinWidth(1200 * 0.8);
+        primaryStage.setMinHeight(800 * 0.8);
         primaryStage.setResizable(false);
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
