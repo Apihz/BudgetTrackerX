@@ -156,6 +156,11 @@ public class TransactionView {
         TableColumn<TransactionApp, String> tranIdCol = new TableColumn<>("Transaction ID");
         tranIdCol.setCellValueFactory(new PropertyValueFactory<>("tranId"));
 
+        categoryCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.15));
+        detailsCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.35));
+        amountCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.15));
+        dateCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.2));
+        tranIdCol.prefWidthProperty().bind(transactionTable.widthProperty().multiply(0.1));
         transactionTable.getColumns().addAll( categoryCol, detailsCol, amountCol, dateCol, tranIdCol);
 
         transactionTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // Enable row selection
