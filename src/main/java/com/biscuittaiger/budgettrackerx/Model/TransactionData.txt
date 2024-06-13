@@ -1,42 +1,7 @@
 userId,month,amount,type,category,details,date,tranId
-1,2,501,income,freelance,salary,2024-2-1,24020174
-1,2,40,income,rental income,salary,2024-2-3,24020365
-2,3,150,income,freelance,monthly,2024-3-15,24031532
-2,1,300,income,bonus,quarterly,2024-1-20,24012057
-2,3,100,expense,entertainment,monthly,2024-3-12,24031284
-3,2,12,expense,food,daily,2024-2-5,24020547
-3,11,1000.0,income,income,loool,2024-11-13,24111028
-3,12,100,expense,Education,year-end,2024-12-20,24122064
-4,12,250,income,income,annual,2024-12-30,24123091
-4,11,120,income,income,lambat,2024-11-5,24110576
-4,4,75,expense,Electronics,seasonal,2024-4-5,24040525
-4,5,200,income,income,weekly,2024-5-10,24051041
-4,5,50,expense,Transportation,monthly,2024-5-15,24051587
-1,1,2144.0,expense,Transportation,awddad,2024-01-13,24011399
-2,6,999.00,expense,Shopping,dwd,2024-06-11,dwd
-2,1,1000,income,income,gaji,2024-06-11,0c17ef16-0654-4436-9f02-94118f7bbd61
-2,1,10,income,income,2,2024-06-11,1290c8a0-2324-4ff9-8884-36fe512aeab0
-1,4,2134,expense,Shopping,2,2024-06-12,6a761150-d79c-4f85-b6c9-1a7d800cd93a
-1,2,2222,expense,Shopping,2,2024-06-12,d2f2f966-acb5-4bd5-bc5f-3b439cb7e29a
-1,3,2222,expense,Shopping,22,2024-06-12,d0cda5ee-9ec5-44c7-810e-12cb14f1988a
-1,1,3.0,income,Shopping,3,2024-06-12,a04f4834-3f2e-4fad-a570-8b6107809332
-1,1,3.0,expense,Shopping,3,2024-06-12,b952b210-bad9-4892-965d-10016236452c
-1,1,3,expense,Education,3,2024-06-12,c482c1bb-079a-4cb3-9a86-4a0532476cce
-1,1,3,expense,Education,3,2024-06-12,5f5a5656-d7e3-47bc-bf14-493076803cd5
-1,1,3,expense,Education,3,2024-06-12,a616db75-7f2b-462c-b2a3-fa575964bbe4
-1,1,995566,income,income,cuci duit,2024-06-12,db5467d0-b40f-4a24-8d95-777325cbc5c2
-1,1,234,expense,Shopping,k,2024-06-12,762
-1,1,23,expense,Shopping,12,2024-06-12,625
-1,1,3,income,income,33,2024-06-12,765
-1,2,90,income,income,A,2024-06-12,308
-1,2,231,income,income,323,2024-06-12,489
-1,2,3213,income,income,3213,2024-06-12,867
-1,2,21343,income,income,23,2024-06-12,573
-1,1,99,income,income,9,2024-06-12,534
-1,1,231,expense,Education,321,2024-06-12,353
-1,3,222,expense,Entertainment,2,2024-06-12,784
-1,3,2222,expense,Entertainment,2,2024-06-12,434
-1,1,40,expense,Food and Beverages,makan malam,2024-01-17,285
-1,1,400,expense,Entertainment,wayang,2024-01-17,313
-4,2,600,expense,Medical,sakit kaki,2024-02-07,996
-1,1,123,income,income,aaaa,2024-01-01,186
+1,1,1500,income,income,kerja freelance,2024-01-13,184
+1,1,20,expense,Shopping,wire type C,2024-01-13,335
+1,1,10,expense,Education,buku bio,2024-06-13,756
+1,1,15,expense,Electronics,charfger,2024-06-13,281
+1,1,425,expense,Education,Yuran Sem 1,2024-01-27,539
+1,1,300,expense,Electronics,earphone,2024-06-13,993

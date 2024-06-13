@@ -1,0 +1,36 @@
+
+* {
+    -fx-text-fill: white;
+    -fx-fill: white;
+}
+
+.label {
+    -fx-text-fill: white;
+    -fx-fill: white;
+}
+#monthSelector{
+    -fx-base: #707070;
+    -fx-translate-y: 20px;
+    -fx-translate-x: 5px;
+}
+#totalExpenseLabel{
+    -fx-background-color: #464646;
+    -fx-background-radius: 5px;
+    -fx-translate-x: 650px;
+    -fx-translate-y: 20px;
+
+}
+.chart-legend-item {
+    -fx-text-fill: Black;
+    -fx-fill: black;
+    -fx-background-color: #464646;
+}
+.chart-legend{
+    -fx-text-fill: black;
+    -fx-fill: black;
+    -fx-background-color: #464646;
+    -fx-translate-x: 20px;
+}
+.chart {
+    -fx-translate-x: -40px;
+}

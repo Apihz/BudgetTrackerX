@@ -140,7 +140,7 @@ public class BudgetView {
         totalBudgetBox.setPadding(new Insets(10, 0, 10, 0));
         VBox.setMargin(totalBudgetBox, new Insets(-15, 0, 0, 0));
 
-        //comparisonBox
+        //iswithinbudgetornot
         withinBudgetLabel = new Label();
         withinBudgetLabel.setId("withinBudgetLabel");
         withinBudgetBox.getChildren().addAll(withinBudgetLabel);
@@ -165,7 +165,7 @@ public class BudgetView {
     private void setBudget() {
         String month = monthSelection.getValue();
         int monthInt = getMonthAsInt(month);
-        String category = categorySelection.getValue();
+        String budgetCategory = categorySelection.getValue();
         double tempAmount;
 
         try {
@@ -176,13 +176,12 @@ public class BudgetView {
             return;
         }
 
-        // Save budget to ArrayList and file
-        saveBudget(userId, monthInt, category, tempAmount);
+        saveBudget(userId, monthInt, budgetCategory, tempAmount);
 
         feedbackLabel.setText("Budget added & updated successfully!");
         displayBudgetStatus();
         double totalBudgetMonthly = calculateTotalBudgetForMonth(userId, monthInt);
-        // Clear input fields
+
         amountField.clear();
         setDashboardBudgetInfo(userId, monthInt, totalBudgetMonthly);
     }
@@ -246,7 +245,7 @@ public class BudgetView {
 
     }
 
-    // Save budget to ArrayList and text file
+    // Save budget to ArrayList and textfile
     private void saveBudget(String userId, int month, String budgetCategory, double budgetAmount) {
         boolean found = false;
 
@@ -280,7 +279,7 @@ public class BudgetView {
                 return budgetItem.getBudgetAmount();
             }
         }
-        return 0.00; // Default value if no budget is found
+        return 0.00; // if no budget is found
     }
 
 
@@ -354,29 +353,26 @@ public class BudgetView {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
 
-            // Read the header line
             String headerLine = reader.readLine();
             if (headerLine != null) {
                 stringBuilder.append(headerLine).append("\n");
             }
 
-            // Read each line and update the values if needed
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] delimiter= line.split(",");
 
-                // Check if the line has the correct number of columns and non-empty userId and month
-                if (parts.length == 7 && !parts[0].isEmpty() && !parts[1].isEmpty()) {
-                    // Check if this is the line to edit
-                    if (userId.equals(parts[0]) && String.valueOf(month).equals(parts[1])) {
-                        // Update the values
-                        parts[5] = String.valueOf(updatedBudget);// Update the budget
+                if (delimiter.length == 7 && !delimiter[0].isEmpty() && !delimiter[1].isEmpty()) {
+
+                    if (userId.equals(delimiter[0]) && String.valueOf(month).equals(delimiter[1])) {
+
+                        delimiter[5] = String.valueOf(updatedBudget);// Update the budget
                     }
                 }
-                // Reconstruct the line
+
                 StringBuilder newLine = new StringBuilder();
-                for (int i = 0; i < parts.length; i++) {
-                    newLine.append(parts[i]);
-                    if (i < parts.length - 1) {
+                for (int i = 0; i < delimiter.length; i++) {
+                    newLine.append(delimiter[i]);
+                    if (i < delimiter.length - 1) {
                         newLine.append(",");
                     }
                 }
@@ -385,7 +381,6 @@ public class BudgetView {
             }
             reader.close();
 
-            // Write the modified content back to the file
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
             writer.write(stringBuilder.toString());
             writer.close();

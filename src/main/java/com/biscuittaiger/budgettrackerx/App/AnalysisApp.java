@@ -18,11 +18,13 @@ public class AnalysisApp {
     };
 
     public BorderPane ExpenseAnalysisApp(String userId) {
-
+        String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/analysis.css").toExternalForm();
         root = new BorderPane();
+        root.getStylesheets().add(css);
         analysisView = new AnalysisView(userId);
 
         monthSelector = new ComboBox<>();
+        monthSelector.setId("monthSelector");
         monthSelector.getItems().addAll(MONTHS);
         monthSelector.setValue(MONTHS[0]);
         monthSelector.setOnAction(e -> {

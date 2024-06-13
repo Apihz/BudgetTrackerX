@@ -30,7 +30,7 @@ public class DashboardApp {
     }
 
 
-    public void readInformationFromFile() {
+    public void readInformationFromFile() {//read information from txt file and store in ArrayList for each month and another arrayList for income,balance,expense,budget,savings
         try (InputStream file = Files.newInputStream(USERS_FILE);
              BufferedReader br = new BufferedReader(new InputStreamReader(file))) {
             String line;
@@ -94,6 +94,7 @@ public class DashboardApp {
         }
     }
 
+    //line chart that compares to all month for each income,balance,expenses,budget,savings
     public LineChart<Number, Number> createLineChart(String title, Function<Integer, Number> dataFunction) {
         NumberAxis xAxis = new NumberAxis(1, 12, 1);
         NumberAxis yAxis = new NumberAxis();
@@ -117,6 +118,8 @@ public class DashboardApp {
         return lineChart;
     }
 
+
+    //all new account will have value income,balance,expense,budget,savings 0 for all month
     public void initializeNewAccount() {
         try (BufferedWriter writer = Files.newBufferedWriter(USERS_FILE, StandardOpenOption.APPEND)) {
             for (int month = 1; month <= 12; month++) {
@@ -127,5 +130,6 @@ public class DashboardApp {
             e.printStackTrace();
         }
     }
+
 
 }

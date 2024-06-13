@@ -50,7 +50,7 @@
 .table-view{
     -fx-background-color: #111011;
     -fx-translate-y: 35px;
-    -fx-min-height: 425px;
+    -fx-min-height: 410px;
     -fx-border-radius: 10px;
 
 }
@@ -71,27 +71,42 @@
 #addButton{
     -fx-background-color: #10b880;
     -fx-text-fill: white;
-}
+    -fx-min-height: 110px;
+    -fx-min-width: 200px;}
 #addButton:hover{
     -fx-background-color: #049769;
 }
 #editButton{
     -fx-background-color: #1086b8;
     -fx-text-fill: white;
-}
+    -fx-min-height: 110px;
+    -fx-min-width: 200px;}
 #editButton:hover{
     -fx-background-color: #045f97;
 }
 #deleteButton{
+    -fx-translate-y: 10px;
     -fx-background-color: #b81042;
     -fx-text-fill: white;
-}
+    -fx-min-height: 110px;
+    -fx-min-width: 200px;}
 #deleteButton:hover{
     -fx-background-color: #970426;
 }
-
+#cancelButton{
+    -fx-translate-y: 10px;
+    -fx-background-color: #c2962a;
+    -fx-text-fill: white;
+    -fx-min-height: 110px;
+    -fx-min-width: 200px;
+}
+#cancelButton:hover{
+    -fx-background-color: #987505;
+}
 #monthComboBox{
     -fx-base:#252728;
+    -fx-translate-y: 40px;
+    -fx-min-width: 125px;
 }
 
 #transactionLabel{
@@ -105,4 +120,81 @@
 #buttonBox{
     -fx-translate-y: 30px;
 }
+#centerRight{
+    -fx-min-height: 270px;
+    -fx-translate-y: 20px;
+    -fx-background-color:#2f2f2f ;
+    -fx-background-radius: 5px;
+    -fx-translate-x: 70px;
+    -fx-text-fill: white;
+
+}
+.label{
+    -fx-text-fill: white;
+    -fx-fill: white;
+}
+
+#amountField{
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+    -fx-background-color: #5b5a5a;
+    -fx-text-fill: white;
+}
+#typeComboBox{
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+    -fx-base: #5b5a5a;
+
+}
+#categoryComboBox{
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+    -fx-base: #5b5a5a;
+    -fx-text-fill: white;
+    -fx-fill: white;
+
+}
+#categoryDisplayField{
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+    -fx-text-fill: white;
+    -fx-background-color: #5b5a5a;
+
+}
+#detailsField{
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+    -fx-text-fill: white;
+    -fx-background-color: #5b5a5a;
+}
+#datePicker{
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+    -fx-base: #5b5a5a;
+    -fx-text-fill: white;
+    -fx-fill: white;
+}
+#saveButton{
+    -fx-background-color: #10b880;
+    -fx-text-fill: white;
+    -fx-min-width: 330px;
+    -fx-min-height: 30px;
+}
+#saveButton:hover{
+    -fx-background-color: #049769;
+}
+#leftVBox{
+    -fx-translate-y: 18px;
+    -fx-translate-x: 40px;
+}
+#selectMonth{
+    -fx-translate-y: 30px;
+    -fx-font-size: 14px;
+}
+#buttonBox2{
+    -fx-translate-y: -10px;
+}
+
+
+
 

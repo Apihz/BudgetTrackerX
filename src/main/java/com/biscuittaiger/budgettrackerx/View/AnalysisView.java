@@ -23,6 +23,7 @@ public class AnalysisView extends VBox {
     private Label totalExpenseLabel;
 
     public AnalysisView(String userId) {
+
         pieChart = new PieChart();
 
         CategoryAxis xAxis = new CategoryAxis();
@@ -82,6 +83,7 @@ public class AnalysisView extends VBox {
             }
         }
         totalExpenseLabel.setText("Total Expense: RM" + totalExpense);
+        totalExpenseLabel.setId("totalExpenseLabel");
         totalExpenseLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
         totalExpenseLabel.setPadding(new Insets(0, 10, 10, 20));
 

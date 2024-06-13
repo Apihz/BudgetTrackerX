@@ -18,6 +18,8 @@ public class MainAppView extends Application {
     private String userId;
     private String username;
 
+
+
     public MainAppView(String userId, String username) {
         this.userId = userId;
         this.username = username;

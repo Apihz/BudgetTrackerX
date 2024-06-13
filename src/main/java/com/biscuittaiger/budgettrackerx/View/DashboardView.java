@@ -52,7 +52,6 @@ public class DashboardView {
         DashboardView dashboardView = this;
         dashboardView.userId = userId;
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/dashboardX.css").toExternalForm();
-        IconPack icon = new IconPack();
 
         month = 1; // Initialize month to January
         dashboard = new DashboardApp(userId, month);
@@ -70,6 +69,7 @@ public class DashboardView {
         headerText.setId("headerText");
         greetings.getChildren().addAll(headerLabel, headerText);
 
+        //menu button for selecting all month
         MenuButton monthMenuButton = new MenuButton("Select Month");
         monthMenuButton.setId("monthMenuButton");
         for (int i = 1; i <= 12; i++) {
@@ -78,7 +78,7 @@ public class DashboardView {
             final int monthIndex = i;
             monthItem.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(ActionEvent event) {
+                public void handle(ActionEvent e) {
                     month = monthIndex;
                     updateDisplayedInformation();
                 }
@@ -87,7 +87,7 @@ public class DashboardView {
         }
         Pane menuPane = new Pane();
         menuPane.getChildren().add(monthMenuButton);
-
+        //date
         dateTimeLabel = new Label();
         dateTimeLabel.setId("dateTimeLabel");
         updateDateTime();
@@ -98,6 +98,7 @@ public class DashboardView {
 
         topHeader.getChildren().addAll(greetings, dateTimeLabel);
 
+        //box for all income,balance,expenses,savings,budget
         HBox moneyOverview = new HBox(10);
         moneyOverview.setId("moneyOverview");
 
@@ -154,10 +155,11 @@ public class DashboardView {
         HBox thirdRow = new HBox(10);
         thirdRow.setId("thirdRow");
 
+        //recent transaction box
         VBox recentTransaction = new VBox(20);
         recentTransaction.setId("recentTransaction");
 
-        Label recentTransactionText = new Label("Recent Transactions");
+        Label recentTransactionText = new Label("Recent Expenses");
         recentTransactionText.setId("recentTransactionText");
 
         transactionTable = new TableView<>();
@@ -203,6 +205,7 @@ public class DashboardView {
 
         updateTransactions(userId, transactionTable);
 
+        //notification box
         VBox notificationBox = new VBox();
         notificationBox.setId("notificationBox");
         Label notificationText = new Label("Notifications");
@@ -230,7 +233,6 @@ public class DashboardView {
 
         thirdRow.getChildren().addAll(recentTransaction, notificationBox);
 
-
         moneyOverview.setPadding(new Insets(10, 10, 10, 10));
         moneyOverview.getChildren().addAll(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox);
 
@@ -243,6 +245,7 @@ public class DashboardView {
         return root;
     }
 
+    //animation
     private void applyFadeTransition(Node node, double durationSeconds) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(durationSeconds), node);
         fadeTransition.setFromValue(0);
@@ -250,6 +253,7 @@ public class DashboardView {
         fadeTransition.play();
     }
 
+    //animation
     private void applyTranslateTransition(Node node, double durationSeconds, double fromX) {
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), node);
         translateTransition.setFromX(fromX);
@@ -257,6 +261,7 @@ public class DashboardView {
         translateTransition.play();
     }
 
+    //animation
     private void animateCharts(VBox... boxes) {
         double durationSeconds = 0.5;
         double initialOffsetX = 30.0;
@@ -266,6 +271,7 @@ public class DashboardView {
         }
     }
 
+    //update the display each time if any data changes or user change month
     private void updateDisplayedInformation() {
         balanceText.setText("RM " + dashboard.getBalance(month));
         incomeText.setText("RM " + dashboard.getIncome(month));
@@ -274,10 +280,11 @@ public class DashboardView {
         savingsText.setText("RM " + dashboard.getSavings(month));
 
         updateTransactions(userId, transactionTable);
-        animateCharts(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox); // Apply animations
+        animateCharts(balanceBox, incomeBox, expenseBox, budgetBox, savingsBox);
 
     }
 
+    //to get real time
     private void updateDateTime() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE hh:mm:ss a");
@@ -285,11 +292,14 @@ public class DashboardView {
         formattedDateTime = formattedDateTime.toUpperCase();
         dateTimeLabel.setText(formattedDateTime);
     }
+
+    //update all transaction and add to table
     private void updateTransactions(String userId, TableView<TransactionApp> transactionTable) {
         ObservableList<TransactionApp> data = getTransactionsFromFile(userId, String.valueOf(month));
         transactionTable.setItems(data);
     }
 
+    //read transaction file
     private ObservableList<TransactionApp> getTransactionsFromFile(String userId, String month) {
         ObservableList<TransactionApp> transactions = FXCollections.observableArrayList();
         String fileName = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionData.txt";
@@ -317,23 +327,24 @@ public class DashboardView {
         return transactions;
     }
 
+    //notification method
     private void checkAndDisplayNotification(int month) {
         String[] categories = {"Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Transportation", "Other Expenses"};
         BudgetView budget = new BudgetView();
         double[] categoryBudget = new double[categories.length];
         double[] categoryExpense;
         try {
-            categoryExpense = BudgetApp.readAndCalculateExpenses(userId, month);
+            categoryExpense = BudgetApp.readAndCalculateExpenses(userId, month);//get category expenses from budgetApp class
         } catch (FileNotFoundException e) {
             return;
         }
 
-        for (int i = 0; i < categories.length; i++) {
+        for (int i = 0; i < categories.length; i++) {//read budget for each categories from budgetView
             categoryBudget[i] = budget.readBudget(userId, month, categories[i]);
         }
 
         for (int i = 0; i < categories.length; i++) {
-            if (categoryExpense[i] > categoryBudget[i]) {
+            if (categoryExpense[i] > categoryBudget[i]) {//compare budget and expenses for each category and display msg if expense is more than budget
                 String message = "Your expenses for the category '" + categories[i] + "' in "+dashboard.getMonthName(month)+" have exceeded the budget!";
                 VBox notificationBox = createNotificationBox(message);
                 VBox.setMargin(notificationBox, new Insets(5, 0, 0, 0));
@@ -357,8 +368,6 @@ public class DashboardView {
                 "-fx-background-radius: 5;" +
                 "-fx-border-radius: 5;" +
                 "-fx-background-color: #343434"
-
-
         );
         notificationList.setMaxWidth(275);
         Label notificationLabel = new Label(message);

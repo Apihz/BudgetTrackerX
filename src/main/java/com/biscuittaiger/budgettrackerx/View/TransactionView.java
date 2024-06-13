@@ -4,7 +4,6 @@ import com.biscuittaiger.budgettrackerx.App.TransactionApp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -12,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -33,6 +31,9 @@ public class TransactionView {
     private final String userId;
     private final ArrayList<TransactionApp> transactionApps;
     private final static String TRANS_FILE = "src/main/java/com/biscuittaiger/budgettrackerx/Model/TransactionData.txt";
+    HBox centerMid = new HBox();
+    VBox centerLeft = new VBox();
+    VBox centerRight = new VBox();
 
     public TransactionView(String userId) {
         this.userId = userId;
@@ -44,8 +45,8 @@ public class TransactionView {
     public VBox getTransactionView() {
         String css = this.getClass().getResource("/com/biscuittaiger/budgettrackerx/Transaction.css").toExternalForm();
 
-        VBox transactionView = new VBox(10);
-        transactionView.setPadding(new Insets(10));
+        VBox transactionView = new VBox(5);
+        transactionView.setPadding(new Insets(5));
         transactionView.getStylesheets().add(css);
 
         monthComboBox = new ComboBox<>();
@@ -62,28 +63,35 @@ public class TransactionView {
         HBox infoBox = new HBox(10);
         infoBox.setPadding(new Insets(10));
 
-        // Setting up the income box
-        VBox incomeBox = createInfoBox("Income", Color.LIGHTGREEN);
+        //income box
+        VBox incomeBox = createInfoBox("Income");
         incomeText = (Text) incomeBox.getChildren().get(1);
 
-        // Setting up the expense box
-        VBox expenseBox = createInfoBox("Expense", Color.LIGHTCORAL);
+        //expense box
+        VBox expenseBox = createInfoBox("Expense");
         expenseText = (Text) expenseBox.getChildren().get(1);
 
-        // Setting up the balance box
-        VBox balanceBox = createInfoBox("Balance", Color.LIGHTBLUE);
+        //balance box
+        VBox balanceBox = createInfoBox("Balance");
         balanceText = (Text) balanceBox.getChildren().get(1);
 
-        // Setting up the savings box
-        VBox savingsBox = createInfoBox("Savings", Color.LIGHTYELLOW);
+        //savings box
+        VBox savingsBox = createInfoBox("Savings");
         savingsText = (Text) savingsBox.getChildren().get(1);
 
         infoBox.getChildren().addAll(incomeBox, expenseBox, balanceBox, savingsBox);
 
+        centerMid.setId("centerMid");
+        centerRight.setId("centerRight");
+        centerLeft.setId("centerLeft");
+
         // Buttons
         Button addButton = new Button("Add");
         addButton.setId("addButton");
-        addButton.setOnAction(e -> showAddTransactionDialog());
+        addButton.setOnAction(e -> {
+            centerRight.getChildren().clear();
+            centerRight.getChildren().add(showAddTransactionDialog());
+        });
 
         transactionTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -102,12 +110,31 @@ public class TransactionView {
 
         Button deleteButton = new Button("Delete");
         deleteButton.setId("deleteButton");
-        deleteButton.setOnAction(event -> deleteSelectedTransaction());
+        deleteButton.setOnAction(e -> deleteSelectedTransaction());
 
-        HBox buttonBox = new HBox(10, addButton, editButton, deleteButton);
-        buttonBox.setId("buttonBox");
-        buttonBox.setPadding(new Insets(10, 0, 0, 0));
-        transactionView.getChildren().addAll(transactionLabel,transactionHeader,monthComboBox, infoBox, buttonBox, transactionTable);
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setId("cancelButton");
+        cancelButton.setOnAction(e-> {
+            centerRight.getChildren().clear();
+        });
+
+        HBox buttonBox1 = new HBox(10, addButton, editButton);
+        buttonBox1.setId("buttonBox1");
+        HBox buttonBox2 = new HBox(10,deleteButton,cancelButton);
+        buttonBox2.setId("buttonBox2");
+        VBox leftVbox = new VBox(10,buttonBox1,buttonBox2);
+        leftVbox.setId("leftVBox");
+        Label selectMonth = new Label("Select month:");selectMonth.setId("selectMonth");
+        VBox leftHeader = new VBox(transactionLabel,transactionHeader,selectMonth);
+        HBox leftHbox = new HBox(monthComboBox,leftVbox);
+        leftHbox.setId("leftHBox");
+        centerMid.getChildren().clear();
+        centerMid.getChildren().addAll(centerLeft, centerRight);
+        centerLeft.getChildren().clear();
+        centerLeft.getChildren().addAll(leftHeader,leftHbox);
+
+
+        transactionView.getChildren().addAll(centerMid, transactionTable);
         fetchAndDisplayTransactions(userId, monthComboBox.getValue());
         return transactionView;
     }
@@ -135,19 +162,18 @@ public class TransactionView {
 
         transactionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // A row is selected, you can perform any necessary actions here
+
             }
         });
     }
 
-    private VBox createInfoBox(String labelText, Color backgroundColor) {
+    private VBox createInfoBox(String labelText) {
         VBox infoBox = new VBox();
         infoBox.setPrefSize(100, 100);
         infoBox.setMinSize(10, 80);
         infoBox.setMaxSize(200, 120);
         infoBox.setPadding(new Insets(10));
         infoBox.setId("informationBox");
-        infoBox.setStyle("-fx-background-color: " + toHexString(backgroundColor) + "; -fx-border-color: black;");
 
         Label label = new Label(labelText);
         Text text = new Text("RM 0.00");
@@ -156,12 +182,6 @@ public class TransactionView {
         return infoBox;
     }
 
-    private String toHexString(Color color) {
-        int r = (int) (color.getRed() * 255);
-        int g = (int) (color.getGreen() * 255);
-        int b = (int) (color.getBlue() * 255);
-        return String.format("#%02X%02X%02X", r, g, b);
-    }
 
     private void fetchAndDisplayTransactions(String userId, String month) {
         try {
@@ -176,7 +196,7 @@ public class TransactionView {
         Scanner readFile = new Scanner(new File(TRANS_FILE));
         ArrayList<TransactionApp> transactionApps = new ArrayList<>();
 
-        int number = 1; // Start the transaction number from 1
+        int number = 1;
         try {
             while (readFile.hasNext()) {
                 String line = readFile.nextLine();
@@ -235,9 +255,7 @@ public class TransactionView {
     }
 
 
-    private void showAddTransactionDialog() {
-        Stage dialog = new Stage();
-        dialog.setTitle("Add TransactionApp");
+    private GridPane showAddTransactionDialog() {
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -245,13 +263,19 @@ public class TransactionView {
         grid.setPadding(new Insets(10, 10, 10, 10));
 
         TextField amountField = new TextField();
+        amountField.setId("amountField");
         ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList("income", "expense", "savings"));
+        typeComboBox.setId("typeComboBox");
         ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Transportation", "Other Expenses"));
+        categoryComboBox.setId("categoryComboBox");
         TextField categoryDisplayField = new TextField();
+        categoryDisplayField.setId("categoryDisplayField");
         categoryDisplayField.setEditable(false);
         categoryDisplayField.setVisible(false); // Initially hidden
         TextField detailsField = new TextField();
+        detailsField.setId("detailsField");
         DatePicker datePicker = new DatePicker(LocalDate.now());
+        datePicker.setId("datePicker");
 
         grid.add(new Label("Amount:"), 0, 0);
         grid.add(amountField, 1, 0);
@@ -289,6 +313,7 @@ public class TransactionView {
         });
 
         Button saveButton = new Button("Save");
+        saveButton.setId("saveButton");
         saveButton.setOnAction(e -> {
             try {
                 String amount = amountField.getText();
@@ -307,25 +332,18 @@ public class TransactionView {
                 writeTransactionToFile(userId, month, amount, type, category, details, date.toString());
                 fetchAndDisplayTransactions(userId, month);
                 calculateAndUpdateBudgetInfo(userId, Integer.parseInt(month));
-                dialog.close();
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Transaction added successfully!");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+
         });
-
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(e -> dialog.close());
-
-        HBox buttonBox = new HBox(10, saveButton, cancelButton);
+        HBox buttonBox = new HBox(10, saveButton);
         grid.add(buttonBox, 1, 5);
+        return grid;
 
-        Scene scene = new Scene(grid, 400, 250);
-        dialog.setScene(scene);
-        dialog.showAndWait();
     }
-
-
-
 
     private void editSelectedTransaction() {
         TransactionApp selectedTransaction = transactionTable.getSelectionModel().getSelectedItem();
@@ -334,25 +352,34 @@ public class TransactionView {
             return;
         }
 
+
+        centerRight.getChildren().clear();
+        centerRight.getChildren().add(showEditTransactionDialog(selectedTransaction));
         showEditTransactionDialog(selectedTransaction);
     }
 
-    private void showEditTransactionDialog(TransactionApp transactionApp) {
-        Stage dialog = new Stage();
-        dialog.setTitle("Edit TransactionApp");
-
+    private GridPane showEditTransactionDialog(TransactionApp transactionApp) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
 
         TextField amountField = new TextField(String.valueOf(transactionApp.getAmount()));
+        amountField.setId("amountField");
         ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList("income", "expense", "savings"));
         typeComboBox.setValue(transactionApp.getType());
-        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Shopping", "Transportation", "Other Expenses"));
+        typeComboBox.setId("typeComboBox");
+        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList("Shopping", "Education", "Electronics", "Entertainment", "Food and Beverages", "Health and Beauty", "Medical", "Transportation", "Other Expenses"));
         categoryComboBox.setValue(transactionApp.getCategory());
+        categoryComboBox.setId("categoryComboBox");
+        TextField categoryDisplayField = new TextField(transactionApp.getCategory());
+        categoryDisplayField.setId("categoryDisplayField");
+        categoryDisplayField.setEditable(false);
+        categoryDisplayField.setVisible(false); // Initially hidden
         TextField detailsField = new TextField(transactionApp.getDetails());
+        detailsField.setId("detailsField");
         DatePicker datePicker = new DatePicker(LocalDate.parse(transactionApp.getDate()));
+        datePicker.setId("datePicker");
 
         grid.add(new Label("Amount:"), 0, 0);
         grid.add(amountField, 1, 0);
@@ -360,17 +387,42 @@ public class TransactionView {
         grid.add(typeComboBox, 1, 1);
         grid.add(new Label("Category:"), 0, 2);
         grid.add(categoryComboBox, 1, 2);
+        grid.add(categoryDisplayField, 1, 2); // Add category display field to the same position
         grid.add(new Label("Details:"), 0, 3);
         grid.add(detailsField, 1, 3);
         grid.add(new Label("Date:"), 0, 4);
         grid.add(datePicker, 1, 4);
 
+        typeComboBox.getSelectionModel().selectFirst(); // Set the default selection to the first item
+        String selectedType = typeComboBox.getValue();
+        if (selectedType != null && selectedType.equals("expense")) {
+            categoryComboBox.setVisible(true);
+            categoryDisplayField.setVisible(false);
+        } else {
+            categoryComboBox.setVisible(false);
+            categoryDisplayField.setVisible(true);
+            categoryDisplayField.setText(selectedType);
+        }
+
+        typeComboBox.setOnAction(e -> {
+            String selectedType2 = typeComboBox.getValue();
+            if (selectedType2 != null && selectedType2.equals("expense")) {
+                categoryComboBox.setVisible(true);
+                categoryDisplayField.setVisible(false);
+            } else {
+                categoryComboBox.setVisible(false);
+                categoryDisplayField.setVisible(true);
+                categoryDisplayField.setText(selectedType2);
+            }
+        });
+
         Button saveButton = new Button("Save");
+        saveButton.setId("saveButton");
         saveButton.setOnAction(event -> {
             try {
                 double amount = Double.parseDouble(amountField.getText());
                 String type = typeComboBox.getValue();
-                String category = categoryComboBox.getValue();
+                String category = type.equals("expense") ? categoryComboBox.getValue() : type;
                 String details = detailsField.getText();
                 LocalDate date = datePicker.getValue();
 
@@ -380,34 +432,26 @@ public class TransactionView {
                 transactionApp.setDetails(details);
                 transactionApp.setDate(date.toString());
 
+                String month = monthComboBox.getValue();
+
                 updateTransactionFile(transactionApp);
                 fetchAndDisplayTransactions(userId, monthComboBox.getValue());
+                calculateAndUpdateBudgetInfo(userId, Integer.parseInt(month));
 
-                dialog.close();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Transaction added successfully!");
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(event -> dialog.close());
-
-        HBox buttonBox = new HBox(10, saveButton, cancelButton);
+        HBox buttonBox = new HBox(10, saveButton);
         grid.add(buttonBox, 1, 5);
 
-        Scene scene = new Scene(grid, 400, 250);
-        dialog.setScene(scene);
-        dialog.showAndWait();
+        return grid;
     }
-    private void restrictDatePickerToMonth(DatePicker datePicker, int month) {
-        datePicker.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(empty || date.getMonthValue() != month);
-            }
-        });
-    }
+
 
     private void deleteSelectedTransaction() {
         TransactionApp selectedTransaction = transactionTable.getSelectionModel().getSelectedItem();
@@ -498,28 +542,24 @@ public class TransactionView {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
 
-            // Read the header line
             String headerLine = reader.readLine();
             if (headerLine != null) {
                 stringBuilder.append(headerLine).append("\n");
             }
 
-            // Read each line and update the values if needed
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
-                // Check if the line has the correct number of columns and non-empty userId and month
                 if (parts.length == 7 && !parts[0].isEmpty() && !parts[1].isEmpty()) {
-                    // Check if this is the line to edit
                     if (userId.equals(parts[0]) && String.valueOf(month).equals(parts[1])) {
-                        // Update the values
+
                         parts[2] = String.valueOf(updatedBalance);
                         parts[3] = String.valueOf(updatedIncome);
                         parts[4] = String.valueOf(updatedExpense);
                         parts[6] = String.valueOf(updatedSavings);
                     }
                 }
-                // Reconstruct the line
+
                 StringBuilder newLine = new StringBuilder();
                 for (int i = 0; i < parts.length; i++) {
                     newLine.append(parts[i]);
@@ -532,7 +572,6 @@ public class TransactionView {
             }
             reader.close();
 
-            // Write the modified content back to the file
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
             writer.write(stringBuilder.toString());
             writer.close();
